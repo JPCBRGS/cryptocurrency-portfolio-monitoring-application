@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zenith/pages/home_page_without_main_sheet.dart';
+import 'package:zenith/screens/home_screen_without_main_sheet.dart';
 
 void main() => runApp(const MyApp());
 

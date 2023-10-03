@@ -24,13 +24,13 @@ class HomeScreenWithoutMainSheet extends StatelessWidget {
                 String? csvString = await csvUtils.selectCsvFile();
                 if (csvString != null) {
                   final cryptos = parseCSV(csvString);
-                  /*
+                  
                   for (final crypto in cryptos) {
                     print('Name: ${crypto.name}');
                     print('Quantity: ${crypto.quantity}');
                     print('Purchase Price: ${crypto.mediumPurchasePrice}');
                     print('Medium Sell Price: ${crypto.mediumSellPrice}');
-                  }*/
+                  }
                 }
               },
               style: ButtonStyle(
