@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:zenith/screens/home_screen_without_main_sheet.dart';
 import 'package:zenith/databases/database_helper.dart'; // Importe seu DatabaseHelper
 
+
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized(); // Garante que o Flutter esteja inicializado
 
-  /*final dbHelper = DatabaseHelper.instance;
-  await dbHelper.database; */
-  final dbHelper = DatabaseHelper();
-  await dbHelper.init();
+  final dbHelper = DatabaseHelper.instance; // Inicialize seu DatabaseHelper
 
   runApp(const MyApp());
 }
