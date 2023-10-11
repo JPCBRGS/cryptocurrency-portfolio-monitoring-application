@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:zenith/screens/home_screen_without_main_sheet.dart';
 import 'package:zenith/databases/database_helper.dart'; // Importe seu DatabaseHelper
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 void main() async {
-  WidgetsFlutterBinding
-      .ensureInitialized(); // Garante que o Flutter esteja inicializado
+  WidgetsFlutterBinding.ensureInitialized(); // Garante que o Flutter esteja inicializado
 
-  final dbHelper = DatabaseHelper.instance;
-  await dbHelper.initializeDatabase(); // Função de inicialização personalizada.
+  /*final dbHelper = DatabaseHelper.instance;
+  await dbHelper.database; */
+  final dbHelper = DatabaseHelper();
+  await dbHelper.init();
 
   runApp(const MyApp());
 }
