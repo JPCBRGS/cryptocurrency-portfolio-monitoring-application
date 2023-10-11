@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:zenith/screens/home_screen_without_main_sheet.dart';
+import 'package:zenith/databases/database_helper.dart'; // Importe seu DatabaseHelper
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Garante que o Flutter esteja inicializado
+
+  final dbHelper = DatabaseHelper.instance;
+  await dbHelper.initializeDatabase(); // Função de inicialização personalizada.
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key); // Corrija o construtor
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,5 @@
 import 'package:csv/csv.dart';
-import 'package:zenith/models/crypto_model.dart';
+import 'package:zenith/models/cryptocurrency.dart';
 
 List<Cryptocurrency> parseCSV(String csvString) {
   final List<List<dynamic>> csvList = CsvToListConverter(eol: '\n', fieldDelimiter: ';').convert(csvString);

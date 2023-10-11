@@ -31,16 +31,35 @@ class DatabaseHelper {
     );
   }
 
+  Future<void> initializeDatabase() async {
+    final db = await _initDatabase();
+    if (db.isOpen) {
+      print('Banco de dados criado com sucesso.');
+    } else {
+      print('Falha ao criar o banco de dados.');
+    }
+  }
+
   // Método para criar a estrutura do banco de dados
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
+      CREATE TABLE Portfolios(
+        ID INTEGER PRIMARY KEY,
+        Name TEXT
+      )
+    ''');
+
+    await db.execute('''
       CREATE TABLE Cryptocurrencies(
         ID INTEGER PRIMARY KEY,
+        PortfolioID INTEGER,
         Name TEXT,
         Quantity REAL,
         PurchasePrice REAL,
-        MediumSellPrice REAL
+        MediumSellPrice REAL,
+        FOREIGN KEY (PortfolioID) REFERENCES Portfolios(ID)
       )
     ''');
   }
+
 }
