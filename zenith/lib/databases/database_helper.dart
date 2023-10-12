@@ -25,12 +25,12 @@ class DatabaseHelper {
   Future<Database> _initializeDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, _databaseName);
-
+    print(path);
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
 /*
-  Future<void> _initializeDatabase() async {
+  Future<void> _initializeDatabase() async {        
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
     _db = await openDatabase(
@@ -61,5 +61,4 @@ class DatabaseHelper {
       )
     ''');
   }
-
 }
