@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -28,6 +30,15 @@ class DatabaseHelper {
     print(path);
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
+
+  Future<void> copyFileToExternalStorage() async {
+    final appDocDir = await getDatabasesPath();
+    final sourceFile = File('$appDocDir/crypto_database.db');
+    final destinationFile = File('/sdcard/Documents/$_databaseName');
+    await sourceFile.copy(destinationFile.path);
+    print("finished");
+  }
+  //adb pull /sdcard/Documents/crypto_database.db D:/Projects/Zenith  
 
 /*
   Future<void> _initializeDatabase() async {        
