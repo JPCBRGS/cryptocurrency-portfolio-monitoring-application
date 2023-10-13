@@ -18,7 +18,9 @@ class DatabaseHelper {
   DatabaseHelper._init();
   // Método para acessar o banco de dados
   Future<Database> get database async {
-    if (_database != null) return _database!;
+    if (_database != null) {
+      return _database!;
+    }
 
     _database = await _initializeDatabase();
     return _database!;
@@ -33,23 +35,11 @@ class DatabaseHelper {
 
   Future<void> copyFileToExternalStorage() async {
     final appDocDir = await getDatabasesPath();
-    final sourceFile = File('$appDocDir/crypto_database.db');
+    final sourceFile = File('$appDocDir/$_databaseName');
     final destinationFile = File('/sdcard/Documents/$_databaseName');
     await sourceFile.copy(destinationFile.path);
     print("finished");
   }
-  //adb pull /sdcard/Documents/crypto_database.db D:/Projects/Zenith  
-
-/*
-  Future<void> _initializeDatabase() async {        
-    final documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, _databaseName);
-    _db = await openDatabase(
-      path,
-      version: _databaseVersion,
-      onCreate: _onCreate,
-    );
-  }*/
 
   // Método para criar a estrutura do banco de dados
   Future<void> _onCreate(Database db, int version) async {

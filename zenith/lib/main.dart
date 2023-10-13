@@ -10,6 +10,7 @@ void main() async {
   await dbHelper.database; // Inicialize o banco de dados
 
   dbHelper.copyFileToExternalStorage();
+  
   runApp(const MyApp());
 }
 
