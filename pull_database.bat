@@ -8,7 +8,7 @@ REM Caminho de origem do arquivo no emulador
 set sourcePath=/sdcard/Documents/crypto_database.db
 
 REM Caminho de destino no seu PC
-set destPath=D:\Projects\Zenith
+set destPath=D:\Projects\Zenith\zenith
 
 REM Execute o comando adb pull
 "%adbPath%" pull "%sourcePath%" "%destPath%"
