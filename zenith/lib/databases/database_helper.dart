@@ -1,16 +1,16 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   // Defina o nome do banco de dados e a versão
-  static final _databaseName = 'crypto_database.db';
-  late Database _db;
+  static const _databaseName = 'crypto_database.db';
 
   static final DatabaseHelper instance = DatabaseHelper._init();
+  
 
   // Crie uma referência para o banco de dados SQLite
   static Database? _database;
@@ -38,27 +38,32 @@ class DatabaseHelper {
     final sourceFile = File('$appDocDir/$_databaseName');
     final destinationFile = File('/sdcard/Documents/$_databaseName');
     await sourceFile.copy(destinationFile.path);
-    print("finished");
+  }
+
+  Future<void> deleteDatabase() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, _databaseName);
+    
+    try {
+      final file = File(path);
+      if (await file.exists()) {
+        await file.delete();
+        print('Banco de dados excluído');
+      }
+    } catch (e) {
+      print('Erro ao excluir o banco de dados: $e');
+    }
   }
 
   // Método para criar a estrutura do banco de dados
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE Portfolios(
-        ID INTEGER PRIMARY KEY,
-        Name TEXT
-      )
-    ''');
-
-    await db.execute('''
       CREATE TABLE Cryptocurrencies(
-        ID INTEGER PRIMARY KEY,
-        PortfolioID INTEGER,
-        Name TEXT,
+        Portfolio TEXT UNIQUE,
+        Symbol TEXT,
         Quantity REAL,
         PurchasePrice REAL,
-        MediumSellPrice REAL,
-        FOREIGN KEY (PortfolioID) REFERENCES Portfolios(ID)
+        MediumSellPrice REAL
       )
     ''');
   }

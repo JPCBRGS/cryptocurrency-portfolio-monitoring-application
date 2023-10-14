@@ -5,6 +5,8 @@ import '../utils/csv_utils.dart';
 import '../utils/csv_parser.dart';
 
 class HomeScreenWithoutMainSheet extends StatelessWidget {
+  const HomeScreenWithoutMainSheet({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,20 +19,28 @@ class HomeScreenWithoutMainSheet extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Botão para importar um .CSV do sistema
             ElevatedButton(
               onPressed: () async {
-                CsvUtils csvUtils = CsvUtils();
-                // Lógica para selecionar um arquivo CSV existente
-                String? csvString = await csvUtils.selectCsvFile();
-                if (csvString != null) {
-                  final cryptos = parseCSV(csvString);
+                CsvUtils csvUtils = CsvUtils(); // Cria uma instância da classe csvUtils para realizar operações com .csv
+                
+                final csvData = await csvUtils.selectCsvFile(); // Lógica para selecionar um arquivo CSV existente no armazenamento
+                if (csvData != null) {
+                  final fileName = csvData['fileName'];
+                  final csvString = csvData['csvString'];
                   
+                  // DEBUG
+                  print('Nome do arquivo: $fileName');
+
+                  final cryptos = parseCSV(csvString, fileName);
                   for (final crypto in cryptos) {
-                    print('Name: ${crypto.name}');
+                    print('Portfolio: ${crypto.portfolio}');
+                    print('Symbol: ${crypto.symbol}');
                     print('Quantity: ${crypto.quantity}');
                     print('Purchase Price: ${crypto.mediumPurchasePrice}');
                     print('Medium Sell Price: ${crypto.mediumSellPrice}');
                   }
+                  // DEBUG
                 }
               },
               style: ButtonStyle(
@@ -45,13 +55,13 @@ class HomeScreenWithoutMainSheet extends StatelessWidget {
                 ),
               ),
             ),
+
+            // Botão para criar o arquivo .CSV vazio quando não é realizada a importação
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 CsvUtils csvUtils = CsvUtils();
-                // Lógica para selecionar um arquivo CSV existente
                 csvUtils.createEmptyCsvFile();
-                // Lógica para criar um arquivo CSV vazio
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
