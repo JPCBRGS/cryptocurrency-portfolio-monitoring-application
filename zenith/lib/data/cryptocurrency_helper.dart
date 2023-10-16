@@ -6,9 +6,48 @@ class CryptocurrencyHelper {
 
   CryptocurrencyHelper(this._db);
 
-  Future<int> insertCryptocurrency(Cryptocurrency cryptocurrency) async {
-    return await _db.insert('Cryptocurrencies', cryptocurrency.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+Future<void> insertCryptocurrency(Cryptocurrency cryptocurrency) async {
+  final existingCrypto = await getCryptocurrencyInPortfolio(cryptocurrency.portfolio, cryptocurrency.symbol);
+
+  if (existingCrypto != null) {
+    // Atualize os valores do registro existente
+    final newQuantity = existingCrypto.quantity + cryptocurrency.quantity;
+    final newPurchasePrice = (existingCrypto.mediumPurchasePrice * existingCrypto.quantity + cryptocurrency.mediumPurchasePrice * cryptocurrency.quantity) / newQuantity;
+    final newSellPrice = (existingCrypto.mediumSellPrice * existingCrypto.quantity + cryptocurrency.mediumSellPrice * cryptocurrency.quantity) / newQuantity;
+
+    final updatedCrypto = Cryptocurrency(
+      portfolio: cryptocurrency.portfolio,
+      symbol: cryptocurrency.symbol,
+      quantity: newQuantity,
+      mediumPurchasePrice: newPurchasePrice,
+      mediumSellPrice: newSellPrice,
+    );
+
+    // Atualize o registro existente no banco de dados
+    await _db.update(
+      'Cryptocurrencies',
+      updatedCrypto.toMap(),
+      where: 'Portfolio = ? AND Symbol = ?',
+      whereArgs: [cryptocurrency.portfolio, cryptocurrency.symbol],
+    );
+  } else {
+    // Se a moeda não existir, insira-a normalmente
+    await _db.insert('Cryptocurrencies', cryptocurrency.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+}
+
+  Future<Cryptocurrency?> getCryptocurrencyInPortfolio(String portfolio, String symbol) async {
+    final List<Map<String, dynamic>> maps = await _db.query(
+      'Cryptocurrencies',
+      where: 'Portfolio = ? AND Symbol = ?',
+      whereArgs: [portfolio, symbol],
+    );
+
+    if (maps.isNotEmpty) {
+      return Cryptocurrency.fromMap(maps.first);
+    } else {
+      return null;
+    }
   }
 
   // Retorna uma lista com todas as Cryptocurrency disponíveis no banco
@@ -30,12 +69,32 @@ class CryptocurrencyHelper {
     );
   }
 
-  Future<void> deleteCryptocurrency(Cryptocurrency cryptocurrency) async {
-    await _db.delete(
+  Future<void> deleteCryptocurrencyPortfolio(String portfolio) async {
+    final rowsAffected = await _db.delete(
+      'Cryptocurrencies',
+      where: 'Portfolio = ?',
+      whereArgs: [portfolio],
+    );
+    
+    if (rowsAffected > 0) {
+      print('Exclusão bem-sucedida. $rowsAffected registros excluídos.');
+    } else {
+      print('Nenhum registro encontrado para exclusão.');
+    }
+  }
+  
+  Future<void> deleteCryptocurrencyInPortfolio(String symbol, String portfolio) async {
+    final rowsAffected = await _db.delete(
       'Cryptocurrencies',
       where: 'Symbol = ? AND Portfolio = ?',
-      whereArgs: [cryptocurrency.symbol, cryptocurrency.portfolio],
+      whereArgs: [symbol, portfolio],
     );
+    
+    if (rowsAffected > 0) {
+      print('Exclusão bem-sucedida. $rowsAffected registros excluídos.');
+    } else {
+      print('Nenhum registro encontrado para exclusão.');
+    }
   }
 
   Future<void> deleteAllCryptocurrencies() async {
@@ -45,5 +104,11 @@ class CryptocurrencyHelper {
     } catch (e) {
       print('Erro ao excluir os registros: $e');
     }
+  }
+
+  Future<bool> checkIfPortfolioExists(String portfolioName) async {
+    final count = Sqflite.firstIntValue(await _db.rawQuery(
+        'SELECT COUNT(*) FROM Cryptocurrencies WHERE Portfolio = ?', [portfolioName]));
+    return count != null && count > 0;
   }
 }

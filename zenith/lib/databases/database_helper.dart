@@ -59,7 +59,7 @@ class DatabaseHelper {
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE Cryptocurrencies(
-        Portfolio TEXT UNIQUE,
+        Portfolio TEXT,
         Symbol TEXT,
         Quantity REAL,
         PurchasePrice REAL,
