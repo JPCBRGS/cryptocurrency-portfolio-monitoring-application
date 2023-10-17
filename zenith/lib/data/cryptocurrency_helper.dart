@@ -50,6 +50,20 @@ Future<void> insertCryptocurrency(Cryptocurrency cryptocurrency) async {
     }
   }
 
+  Future<List<Cryptocurrency>> getCryptocurrenciesFromPortfolio(String portfolioName) async {
+    final List<Map<String, dynamic>> maps = await _db.query(
+      'Cryptocurrencies',
+      where: 'Portfolio = ?',
+      whereArgs: [portfolioName],
+    );
+
+    final cryptocurrencies = List.generate(maps.length, (i) {
+      return Cryptocurrency.fromMap(maps[i]);
+    });
+
+    return cryptocurrencies;
+  }
+
   // Retorna uma lista com todas as Cryptocurrency disponíveis no banco
   Future<List<Cryptocurrency>> getAllCryptocurrencies() async {
     final List<Map<String, dynamic>> maps = await _db.query('Cryptocurrencies');
@@ -110,5 +124,26 @@ Future<void> insertCryptocurrency(Cryptocurrency cryptocurrency) async {
     final count = Sqflite.firstIntValue(await _db.rawQuery(
         'SELECT COUNT(*) FROM Cryptocurrencies WHERE Portfolio = ?', [portfolioName]));
     return count != null && count > 0;
+  }
+
+  Future<int> countDistinctPortfolios() async {
+    final result = await _db.rawQuery('SELECT COUNT(DISTINCT Portfolio) FROM Cryptocurrencies');
+    final count = Sqflite.firstIntValue(result);
+    return count ?? 0;
+  }
+
+  Future<List<String>> getPortfoliosOrderedByCryptocurrencies() async {
+    final List<Map<String, dynamic>> maps = await _db.rawQuery('''
+      SELECT Portfolio, COUNT(Symbol) AS CryptoCount
+      FROM Cryptocurrencies
+      GROUP BY Portfolio
+      ORDER BY CryptoCount DESC
+    ''');
+
+    final portfolios = List.generate(maps.length, (i) {
+      return maps[i]['Portfolio'] as String;
+    });
+
+    return portfolios;
   }
 }
