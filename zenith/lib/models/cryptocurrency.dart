@@ -2,24 +2,21 @@ class Cryptocurrency {
   final String portfolio; // Nome do portfolio
   final String symbol; // Sigla que representa o nome da criptomoeda
   final double quantity; // Quantidade disponível da criptomoeda
-  final double mediumPurchasePrice; // Preço médio de compra da criptomoeda
-  final double mediumSellPrice; // Valor médio de venda da criptomoeda
+  final double averagePurchasePrice; // Preço médio de compra da criptomoeda
 
   Cryptocurrency({
     required this.portfolio,
     required this.symbol,
     required this.quantity,
-    required this.mediumPurchasePrice,
-    required this.mediumSellPrice,
+    required this.averagePurchasePrice,
   });
 
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{
-      'Portfolio': portfolio, // Armazene o nome do portfolio
+      'Portfolio': portfolio, 
       'Symbol': symbol,
       'Quantity': quantity,
-      'PurchasePrice': mediumPurchasePrice,
-      'MediumSellPrice': mediumSellPrice,
+      'PurchasePrice': averagePurchasePrice,
     };
     return map;
   }
@@ -28,6 +25,5 @@ class Cryptocurrency {
       : portfolio = map['Portfolio'],
         symbol = map['Symbol'],
         quantity = map['Quantity'],
-        mediumPurchasePrice = map['PurchasePrice'],
-        mediumSellPrice = map['MediumSellPrice'];
+        averagePurchasePrice = map['PurchasePrice'];
 }

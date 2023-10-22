@@ -7,11 +7,10 @@ import 'package:path/path.dart';
 
 class DatabaseHelper {
   // Defina o nome do banco de dados e a versão
-  static const _databaseName = 'crypto_database.db';
+  static const _databaseName = 'cryptocurrency_database.db';
 
   static final DatabaseHelper instance = DatabaseHelper._init();
   
-
   // Crie uma referência para o banco de dados SQLite
   static Database? _database;
 
@@ -29,7 +28,6 @@ class DatabaseHelper {
   Future<Database> _initializeDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, _databaseName);
-    print(path);
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
@@ -62,8 +60,7 @@ class DatabaseHelper {
         Portfolio TEXT,
         Symbol TEXT,
         Quantity REAL,
-        PurchasePrice REAL,
-        MediumSellPrice REAL
+        AveragePurchasePrice REAL,
       )
     ''');
   }
