@@ -5,7 +5,7 @@ REM Local onde o adb.exe está localizado no seu sistema
 set adbPath=D:\Android\Sdk\platform-tools\adb.exe
 
 REM Caminho de origem do arquivo no emulador
-set sourcePath=/sdcard/Documents/crypto_database.db
+set sourcePath=/sdcard/Documents/cryptocurrency_database.db
 
 REM Caminho de destino no seu PC
 set destPath=D:\Projects\Zenith\zenith

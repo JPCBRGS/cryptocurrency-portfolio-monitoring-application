@@ -60,7 +60,7 @@ class DatabaseHelper {
         Portfolio TEXT,
         Symbol TEXT,
         Quantity REAL,
-        AveragePurchasePrice REAL,
+        AveragePurchasePrice REAL
       )
     ''');
   }
