@@ -16,7 +16,7 @@ class Cryptocurrency {
       'Portfolio': portfolio, 
       'Symbol': symbol,
       'Quantity': quantity,
-      'PurchasePrice': averagePurchasePrice,
+      'AveragePurchasePrice': averagePurchasePrice,
     };
     return map;
   }
@@ -25,5 +25,5 @@ class Cryptocurrency {
       : portfolio = map['Portfolio'],
         symbol = map['Symbol'],
         quantity = map['Quantity'],
-        averagePurchasePrice = map['PurchasePrice'];
+        averagePurchasePrice = map['AveragePurchasePrice'];
 }

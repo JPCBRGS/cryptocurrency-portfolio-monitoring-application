@@ -43,7 +43,7 @@ class CsvUtils {
       if (row.isNotEmpty) {
         final cryptocurrency = Cryptocurrency(
           portfolio: portfolioName, // Define o nome do portfolio
-          symbol: row[0] ?? '',
+          symbol: row[0],
           quantity: double.tryParse(row[1].toString()) ?? 0.0,
           averagePurchasePrice: double.tryParse(row[2].toString()) ?? 0.0,
         );
