@@ -1,10 +1,14 @@
-// ignore_for_file: prefer_const_constructors, unused_import
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
+import 'package:zenith/constants/app_colors.dart'; // Importe o arquivo appColors.dart
+import 'package:zenith/data/cryptocurrency_helper.dart';
+import 'package:zenith/databases/database_helper.dart';
+import 'package:zenith/view/screens/home_screen_with_portfolio.dart';
+import 'package:zenith/view/screens/home_screen_without_portfolio.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  const SplashPage({Key? key});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -13,17 +17,58 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      backgroundColor: AppColors.mainBackgroundColor,
       body: Center(
-        child: Text("Bem-vindo")
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Transform.scale(
+              scale: 0.6,
+              child: Image.asset('assets/images/blockchain-icon.png'),
+            ),
+            ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return LinearGradient(
+                  colors: [const Color.fromARGB(255, 120, 190, 247), const Color.fromARGB(255, 253, 145, 181)],
+                ).createShader(bounds);
+              },
+              child: Text(
+                "Welcome to Zenith!",
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
-  
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    hasPortfolio();
+  }
+
+  Future<void> hasPortfolio() async {
+    final _log = Logger();
+    final dbHelper = DatabaseHelper.instance;
+    final database = await dbHelper.database;
+    CryptocurrencyHelper cryptocurrencyHelper = CryptocurrencyHelper(database);
+    int portfolioCount = await cryptocurrencyHelper.countDistinctPortfolios();
+    bool hasPortfolios = portfolioCount > 0 ? true : false;
+    hasPortfolios = false;
+    _log.i('Número de portfólios: $portfolioCount');
+
+    if (!hasPortfolios) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreenWithoutPortfolio()));
+    } else {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreenWithPortfolio()));
+    }
   }
 }
