@@ -48,6 +48,7 @@ class _HomeScreenWithoutPortfolioState extends State<HomeScreenWithoutPortfolio>
                     for (Cryptocurrency cryptocurrency in Cryptocurrencies) {
                       await cryptocurrencyHelper.insertCryptocurrency(cryptocurrency);
                     }
+                    await dbHelper.copyFileToExternalStorage();
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreenWithPortfolio()));
                   } else {
                     final _log = Logger();

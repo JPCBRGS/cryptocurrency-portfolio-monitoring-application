@@ -10,7 +10,6 @@ void main() async {
   final dbHelper = DatabaseHelper.instance; // Inicializa a instância do helper do banco de dados
 // final database = await dbHelper.database; // Inicializa o banco (cria um se não existir, ou abre o banco já existente)
 
-  await dbHelper.copyFileToExternalStorage();
   runApp(MyApp());
 }
 

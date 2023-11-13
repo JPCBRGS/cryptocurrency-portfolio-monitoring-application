@@ -37,6 +37,18 @@ class _AlertScreenState extends State<AlertScreen> {
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 70),
+        child: FloatingActionButton(
+          onPressed: () {
+            // Add your functionality when the button is pressed
+          },
+          backgroundColor: AppColors.secondaryBackgroundColor, // Set the background color as needed
+          child: Icon(Icons.add), // You can change the icon as needed
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
     );
   }
 }
