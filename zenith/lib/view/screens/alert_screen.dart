@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zenith/constants/app_colors.dart';
+import 'package:zenith/constants/font_styles.dart';
 import 'package:zenith/view/components/main_bottom_navigation_bar.dart';
 import 'package:zenith/view/screens/home_screen_with_portfolio.dart';
 
@@ -28,7 +29,10 @@ class _AlertScreenState extends State<AlertScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.secondaryBackgroundColor,
-        title: Text('Price Alerts'),
+        title: Text(
+          'Alerts',
+          style: FontStyles.montserratStyle(18),
+        ),
       ),
       body: Container(
         color: AppColors.mainBackgroundColor,

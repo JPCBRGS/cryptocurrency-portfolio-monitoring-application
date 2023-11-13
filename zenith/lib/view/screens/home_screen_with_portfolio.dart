@@ -7,6 +7,8 @@ import 'package:zenith/databases/database_helper.dart';
 import 'package:zenith/models/cryptocurrency.dart';
 import 'package:zenith/utils/csv_utils.dart';
 import 'package:zenith/view/components/main_bottom_navigation_bar.dart';
+import 'package:zenith/view/components/main_drawer.dart';
+import 'package:zenith/view/components/portfolio_dropdown.dart';
 import 'package:zenith/view/screens/alert_screen.dart';
 
 class HomeScreenWithPortfolio extends StatefulWidget {
@@ -17,16 +19,22 @@ class HomeScreenWithPortfolio extends StatefulWidget {
 }
 
 class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
-  int _currentIndex = 0; // Defina o índice atual conforme necessário
+  int _currentIndex = 0; // define o índice referente a página atual conforme necessário
+  List<String> portfolios = [];
+  String? selectedPortfolio;
 
-  void _onItemTapped(int index) {
-    if (index == 1) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AlertScreen()));
-    } else {
-      setState(() {
-        _currentIndex = index;
-      });
-    }
+  Future<void> loadData() async {
+    final dbHelper = DatabaseHelper.instance;
+    final database = await dbHelper.database;
+    CryptocurrencyHelper cryptocurrencyHelper = CryptocurrencyHelper(database);
+
+    List<String> allPortfoliosOrderedByCryptocurrencyCount = await cryptocurrencyHelper.getPortfoliosOrderedByCryptocurrencies();
+
+    setState(() {
+      portfolios = allPortfoliosOrderedByCryptocurrencyCount;
+      // Defina o valor inicial como o primeiro item da lista
+      selectedPortfolio = portfolios.isNotEmpty ? portfolios[0] : '';
+    });
   }
 
   @override
@@ -34,6 +42,10 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     return Scaffold(
       backgroundColor: AppColors.mainBackgroundColor,
       appBar: AppBar(
+        title: Text(
+          'Portfolios',
+          style: FontStyles.montserratStyle(18),
+        ),
         backgroundColor: AppColors.secondaryBackgroundColor,
         leading: Builder(
           builder: (BuildContext context) {
@@ -45,90 +57,27 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
             );
           },
         ),
-        /*
-        title: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            value: null,
-            onChanged: (String? newValue) {
-              setState(() {
-              });
-            },
-            items: [], // Adicione os itens do dropdown aqui
-          ),
-        ),*/
       ),
-      drawer: Drawer(
-        child: Container(
-          color: AppColors.mainBackgroundColor,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              Container(
-                height: 94,
-                child: DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: AppColors.secondaryBackgroundColor,
-                  ),
-                  child: Text(
-                    'Actions',
-                    style: FontStyles.montserratStyle(15, color: Colors.white, fontWeight: FontWeight.bold)
-                  ),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  'Add new portfolio from files',
-                  style: FontStyles.montserratStyle(15)
-                ),
-                onTap: () async {
-                  CsvUtils csvUtils = CsvUtils();
-                  var csvResult = await csvUtils.selectCsvFile();
-                  if (csvResult != null) {
-                    List<Cryptocurrency> cryptocurrencies =
-                        csvUtils.parseCSVIntoCryptocurrencyList(csvResult['fileName'], csvResult['csvString']);
-                    final dbHelper = DatabaseHelper.instance;
-                    final database = await dbHelper.database;
-                    CryptocurrencyHelper cryptocurrencyHelper = CryptocurrencyHelper(database);
-                    for (Cryptocurrency cryptocurrency in cryptocurrencies) {
-                      await cryptocurrencyHelper.insertCryptocurrency(cryptocurrency);
-                    }
-                    await dbHelper.copyFileToExternalStorage();
-                  } else {
-                    final _log = Logger();
-                    _log.i('No file selected.');
-                  }
-                },
-              ),
-              ListTile(
-                title: Text(
-                  'Add new empty .CSV portfolio file',
-                  style: FontStyles.montserratStyle(15)
-                ),
-                onTap: () async {
-                  
-                },
-              ),
-              ListTile(
-                title: Text(
-                  'View settings',
-                  style: FontStyles.montserratStyle(15)
-                ),
-                onTap: () async {
-                },
-              ),
-              ListTile(
-                title: Text(
-                  'Help',
-                  style: FontStyles.montserratStyle(15)
-                ),
-                onTap: () async {
-                },
-              ),
-            ],
-          ),
+      drawer: MainDrawer(
+        loadedDropdownState: () {
+          loadData();
+        },
+      ),
+      body: Column(children: [
+        PortfolioDropdown(
+          portfolios: portfolios,
+          selectedPortfolio: selectedPortfolio,
         ),
-      ),
-      body: Container(), 
+        /*
+        ListView.builder(
+          itemCount:
+              meusArmariosController.listArmario.length,
+          itemBuilder: (context, index) {
+            return buildArmario(
+              meusArmariosController.listArmario[index],
+            );
+        })*/
+      ]),
       bottomNavigationBar: MainBottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
@@ -136,18 +85,19 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     );
   }
 
-    @override
   void initState() {
     super.initState();
+    loadData();
   }
 
-  Future<List<String>> getAllPortfolios() async {
-    final dbHelper = DatabaseHelper.instance;
-    final database = await dbHelper.database;
-    CryptocurrencyHelper cryptocurrencyHelper = CryptocurrencyHelper(database);
-
-    List<String> allPortfoliosOrderedByCryptocurrencyCount = await cryptocurrencyHelper.getPortfoliosOrderedByCryptocurrencies();
-
-    return allPortfoliosOrderedByCryptocurrencyCount;
+  // método da barra de navegação inferior para navegar entre páginas diferentes
+  void _onItemTapped(int index) {
+    if (index == 1) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AlertScreen()));
+    } else {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
   }
 }

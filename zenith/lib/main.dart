@@ -7,9 +7,6 @@ import 'package:zenith/view/splashes/splash_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Garante que o Flutter esteja inicializado
 
-  final dbHelper = DatabaseHelper.instance; // Inicializa a instância do helper do banco de dados
-// final database = await dbHelper.database; // Inicializa o banco (cria um se não existir, ou abre o banco já existente)
-
   runApp(MyApp());
 }
 
@@ -19,6 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Zenith',
       home: SplashPage(),
     );
