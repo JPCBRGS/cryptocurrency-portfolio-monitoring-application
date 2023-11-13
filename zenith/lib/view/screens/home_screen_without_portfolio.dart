@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:zenith/constants/app_colors.dart';
+import 'package:zenith/constants/font_styles.dart';
 import 'package:zenith/data/cryptocurrency_helper.dart';
 import 'package:zenith/databases/database_helper.dart';
 import 'package:zenith/models/cryptocurrency.dart';
@@ -24,6 +25,17 @@ class _HomeScreenWithoutPortfolioState extends State<HomeScreenWithoutPortfolio>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsets.only(left:40, right: 40),
+                child: Text(
+                  "Hi! Before using the application, choose one of the options below:",
+                  style: FontStyles.montserratStyle(18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                height: 40,
+              ),
               ElevatedButton(
                 onPressed: () async {
                   CsvUtils csvUtils = CsvUtils();
@@ -42,26 +54,29 @@ class _HomeScreenWithoutPortfolioState extends State<HomeScreenWithoutPortfolio>
                     _log.i('Nenhum arquivo foi selecionado.');
                   }
                 },
-                child: Text(
-                  "Importar arquivo .CSV",
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white,
-                    ),
-                  ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.secondaryBackgroundColor,
+                  maximumSize: Size(300, double.infinity),
+                  minimumSize: Size(300, 70), 
                 ),
+                child: Text(
+                  "Import a new portfolio .CSV file",
+                  style: FontStyles.montserratStyle(15, color: Colors.white),
+                ),
+              ),
+              SizedBox(
+                height: 40,
               ),
               ElevatedButton(
                 onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.secondaryBackgroundColor, 
+                  maximumSize: Size(300, double.infinity),
+                  minimumSize: Size(300, 70),
+                ),
                 child: Text(
-                  "começar com um arquivo vazio",
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white,
-                    ),
-                  ),
+                  "Start with an empty portfolio",
+                  style: FontStyles.montserratStyle(15, color: Colors.white),
                 ),
               )
             ],

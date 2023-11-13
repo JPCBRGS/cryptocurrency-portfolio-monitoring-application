@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:zenith/constants/app_colors.dart'; // Importe o arquivo appColors.dart
+import 'package:zenith/constants/font_styles.dart';
 import 'package:zenith/data/cryptocurrency_helper.dart';
 import 'package:zenith/databases/database_helper.dart';
 import 'package:zenith/view/screens/home_screen_with_portfolio.dart';
@@ -30,17 +31,12 @@ class _SplashPageState extends State<SplashPage> {
             ShaderMask(
               shaderCallback: (Rect bounds) {
                 return LinearGradient(
-                  colors: [const Color.fromARGB(255, 120, 190, 247), const Color.fromARGB(255, 253, 145, 181)],
+                  colors: [const Color.fromARGB(255, 120, 190, 245), const Color.fromARGB(255, 255, 145, 180)],
                 ).createShader(bounds);
               },
               child: Text(
                 "Welcome to Zenith!",
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
-                ),
+                style: FontStyles.montserratStyle(24, color: Colors.white),
               ),
             ),
           ],
@@ -62,9 +58,8 @@ class _SplashPageState extends State<SplashPage> {
     CryptocurrencyHelper cryptocurrencyHelper = CryptocurrencyHelper(database);
     int portfolioCount = await cryptocurrencyHelper.countDistinctPortfolios();
     bool hasPortfolios = portfolioCount > 0 ? true : false;
-    hasPortfolios = false;
     _log.i('Número de portfólios: $portfolioCount');
-
+    await Future.delayed(Duration(seconds: 4));
     if (!hasPortfolios) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreenWithoutPortfolio()));
     } else {
