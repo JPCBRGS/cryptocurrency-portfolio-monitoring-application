@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:zenith/models/cryptocurrency.dart';
 
 class CsvUtils {
-
   // Método responsável por selecionar um arquivo .CSV do sistema, transformar em uma string, e retornar um map com o nome do arquivo e a string dos dados
   Future<Map?> selectCsvFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -15,7 +14,7 @@ class CsvUtils {
     if (result != null) {
       final file = File(result.files.single.path!);
       final fileNameWithExtension = result.files.single.name;
-      
+
       // Remove a extensão ".csv" do nome do arquivo
       final fileName = fileNameWithExtension.replaceAll('.csv', ''); // Retira a extensão do nome do arquivo (que é utilizado como nome do portfólio)
 
@@ -34,12 +33,13 @@ class CsvUtils {
     print('Criar um arquivo CSV vazio');
   }
 
-  // Método responsável por receber um map que tem dois membros, o nome do portfólio e a string csvString que contém os dados do .CSV importado com as Cryptocurrency 
+  // Método responsável por receber um map que tem dois membros, o nome do portfólio e a string csvString que contém os dados do .CSV importado com as Cryptocurrency
   // Retorna uma lista de Cryptocurrency correspondentes aos dados processados
   List<Cryptocurrency> parseCSVIntoCryptocurrencyList(String portfolioName, String csvString) {
     final List<List<dynamic>> csvList = const CsvToListConverter(eol: '\n', fieldDelimiter: ';').convert(csvString);
     final List<Cryptocurrency> processedCryptocurrencies = [];
     for (final row in csvList) {
+      print(row[0]);
       if (row.isNotEmpty) {
         final cryptocurrency = Cryptocurrency(
           portfolio: portfolioName, // Define o nome do portfolio

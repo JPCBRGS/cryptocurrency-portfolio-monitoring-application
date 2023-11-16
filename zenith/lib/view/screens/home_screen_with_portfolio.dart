@@ -22,11 +22,15 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
   int _currentIndex = 0; // define o índice referente a página atual conforme necessário
   List<String> portfolios = [];
   String? selectedPortfolio;
+  List<Cryptocurrency> cryptocurrencies = [];
+  var dbHelper;
+  var database;
+  var cryptocurrencyHelper;
 
   Future<void> loadData() async {
-    final dbHelper = DatabaseHelper.instance;
-    final database = await dbHelper.database;
-    CryptocurrencyHelper cryptocurrencyHelper = CryptocurrencyHelper(database);
+    dbHelper = DatabaseHelper.instance;
+    database = await dbHelper.database;
+    cryptocurrencyHelper = CryptocurrencyHelper(database);
 
     List<String> allPortfoliosOrderedByCryptocurrencyCount = await cryptocurrencyHelper.getPortfoliosOrderedByCryptocurrencies();
 
@@ -35,6 +39,8 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
       // Defina o valor inicial como o primeiro item da lista
       selectedPortfolio = portfolios.isNotEmpty ? portfolios[0] : '';
     });
+
+    getCryptocurrenciesFromPortfolioToShow(selectedPortfolio!);
   }
 
   @override
@@ -63,20 +69,29 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
           loadData();
         },
       ),
-      body: Column(children: [
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
         PortfolioDropdown(
           portfolios: portfolios,
           selectedPortfolio: selectedPortfolio,
         ),
-        /*
         ListView.builder(
-          itemCount:
-              meusArmariosController.listArmario.length,
-          itemBuilder: (context, index) {
-            return buildArmario(
-              meusArmariosController.listArmario[index],
-            );
-        })*/
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: cryptocurrencies.length,
+            itemBuilder: (context, index) {
+              return Row(
+                children:[
+                  Text(
+                    cryptocurrencies[index].symbol,
+                    style: FontStyles.montserratStyle(18),),
+                  Text(
+                    cryptocurrencies[index].quantity.toString(),
+                    style: FontStyles.montserratStyle(18),),
+                ],
+              );
+            })
       ]),
       bottomNavigationBar: MainBottomNavigationBar(
         currentIndex: _currentIndex,
@@ -88,6 +103,10 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
   void initState() {
     super.initState();
     loadData();
+  }
+
+  void getCryptocurrenciesFromPortfolioToShow(String portfolio) async{
+    cryptocurrencies = await cryptocurrencyHelper.getCryptocurrenciesFromPortfolio(portfolio);
   }
 
   // método da barra de navegação inferior para navegar entre páginas diferentes

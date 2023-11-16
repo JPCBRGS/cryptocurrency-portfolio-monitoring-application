@@ -31,6 +31,7 @@ class _PortfolioDropdownState extends State<PortfolioDropdown> {
     }
 
     return Container(
+      width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.all(10.0), 
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0), 
@@ -52,8 +53,8 @@ class _PortfolioDropdownState extends State<PortfolioDropdown> {
             ),
           );
         }).toList(),
-        icon: Icon(Icons.arrow_drop_down, color: Colors.black), 
-        iconSize: 24.0,
+        icon: Icon(Icons.arrow_drop_down, color: Colors.white), 
+        iconSize: 40.0,
         elevation: 16,
         style: FontStyles.montserratStyle(15, color: AppColors.secondaryBackgroundColor),
         underline: Container(
