@@ -39,7 +39,6 @@ class CsvUtils {
     final List<List<dynamic>> csvList = const CsvToListConverter(eol: '\n', fieldDelimiter: ';').convert(csvString);
     final List<Cryptocurrency> processedCryptocurrencies = [];
     for (final row in csvList) {
-      print(row[0]);
       if (row.isNotEmpty) {
         final cryptocurrency = Cryptocurrency(
           portfolio: portfolioName, // Define o nome do portfolio

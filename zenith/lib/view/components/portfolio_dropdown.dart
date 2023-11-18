@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zenith/constants/app_colors.dart';
 import 'package:zenith/constants/font_styles.dart';
-import 'package:zenith/data/cryptocurrency_helper.dart';
-import 'package:zenith/databases/database_helper.dart';
 
 class PortfolioDropdown extends StatefulWidget {
   @override
@@ -11,7 +9,7 @@ class PortfolioDropdown extends StatefulWidget {
   List<String>? portfolios = [];
   String? selectedPortfolio;
 
-  PortfolioDropdown({
+  PortfolioDropdown({super.key, 
     this.portfolios,
     this.selectedPortfolio,
   });
@@ -26,25 +24,25 @@ class _PortfolioDropdownState extends State<PortfolioDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget!.portfolios!.isEmpty) {
-      return CircularProgressIndicator();
+    if (widget.portfolios!.isEmpty) {
+      return const CircularProgressIndicator();
     }
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.all(10.0), 
+      margin: const EdgeInsets.all(10.0), 
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0), 
         color: AppColors.secondaryBackgroundColor, 
       ),
       child: DropdownButton<String>(
-        value: widget!.selectedPortfolio,
+        value: widget.selectedPortfolio,
         onChanged: (String? newValue) {
           setState(() {
-            widget!.selectedPortfolio = newValue!;
+            widget.selectedPortfolio = newValue!;
           });
         },
-        items: widget!.portfolios!.map((String portfolio) {
+        items: widget.portfolios!.map((String portfolio) {
           return DropdownMenuItem<String>(
             value: portfolio,
             child: Padding(
@@ -53,7 +51,7 @@ class _PortfolioDropdownState extends State<PortfolioDropdown> {
             ),
           );
         }).toList(),
-        icon: Icon(Icons.arrow_drop_down, color: Colors.white), 
+        icon: const Icon(Icons.arrow_drop_down, color: Colors.white), 
         iconSize: 40.0,
         elevation: 16,
         style: FontStyles.montserratStyle(15, color: AppColors.secondaryBackgroundColor),

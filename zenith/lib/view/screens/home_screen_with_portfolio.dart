@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:zenith/constants/app_colors.dart';
 import 'package:zenith/constants/font_styles.dart';
 import 'package:zenith/data/cryptocurrency_helper.dart';
 import 'package:zenith/databases/database_helper.dart';
 import 'package:zenith/models/cryptocurrency.dart';
-import 'package:zenith/utils/csv_utils.dart';
 import 'package:zenith/view/components/main_bottom_navigation_bar.dart';
 import 'package:zenith/view/components/main_drawer.dart';
 import 'package:zenith/view/components/portfolio_dropdown.dart';
@@ -36,6 +34,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
 
     setState(() {
       portfolios = allPortfoliosOrderedByCryptocurrencyCount;
+      
       // Defina o valor inicial como o primeiro item da lista
       selectedPortfolio = portfolios.isNotEmpty ? portfolios[0] : '';
     });
@@ -56,7 +55,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: Icon(Icons.menu),
+              icon: const Icon(Icons.menu),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
@@ -69,26 +68,33 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
           loadData();
         },
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
+      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         PortfolioDropdown(
           portfolios: portfolios,
           selectedPortfolio: selectedPortfolio,
         ),
         ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: cryptocurrencies.length,
             itemBuilder: (context, index) {
               return Row(
-                children:[
+                children: [
                   Text(
                     cryptocurrencies[index].symbol,
-                    style: FontStyles.montserratStyle(18),),
+                    style: FontStyles.montserratStyle(18),
+                  ),
                   Text(
                     cryptocurrencies[index].quantity.toString(),
-                    style: FontStyles.montserratStyle(18),),
+                    style: FontStyles.montserratStyle(18),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      deleteSelectedCryptocurrency(cryptocurrencies[index].symbol.toString(), selectedPortfolio!);
+                      initState();
+                    },
+                  ),
                 ],
               );
             })
@@ -100,19 +106,24 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     );
   }
 
+  @override
   void initState() {
     super.initState();
     loadData();
   }
 
-  void getCryptocurrenciesFromPortfolioToShow(String portfolio) async{
+  void getCryptocurrenciesFromPortfolioToShow(String portfolio) async {
     cryptocurrencies = await cryptocurrencyHelper.getCryptocurrenciesFromPortfolio(portfolio);
+  }
+
+  void deleteSelectedCryptocurrency(String symbol, String portfolio) async {
+    await cryptocurrencyHelper.deleteCryptocurrencyInPortfolio(symbol, portfolio);
   }
 
   // método da barra de navegação inferior para navegar entre páginas diferentes
   void _onItemTapped(int index) {
     if (index == 1) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AlertScreen()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AlertScreen()));
     } else {
       setState(() {
         _currentIndex = index;

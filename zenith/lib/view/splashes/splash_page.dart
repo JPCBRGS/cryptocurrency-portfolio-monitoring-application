@@ -59,7 +59,6 @@ class _SplashPageState extends State<SplashPage> {
     int portfolioCount = await cryptocurrencyHelper.countDistinctPortfolios();
     bool hasPortfolios = portfolioCount > 0 ? true : false;
     _log.i('Número de portfólios: $portfolioCount');
-    await Future.delayed(Duration(seconds: 4));
     if (!hasPortfolios) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreenWithoutPortfolio()));
     } else {

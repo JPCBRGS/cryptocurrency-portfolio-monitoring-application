@@ -10,7 +10,7 @@ import 'package:zenith/utils/csv_utils.dart';
 class MainDrawer extends StatelessWidget {
   final Function? loadedDropdownState;
 
-  MainDrawer({
+  const MainDrawer({super.key, 
     this.loadedDropdownState,
   });
 
@@ -22,10 +22,10 @@ class MainDrawer extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            Container(
+            SizedBox(
               height: 94,
               child: DrawerHeader(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppColors.secondaryBackgroundColor,
                 ),
                 child: Text(
@@ -56,8 +56,8 @@ class MainDrawer extends StatelessWidget {
                   loadedDropdownState!();
                   await dbHelper.copyFileToExternalStorage();
                 } else {
-                  final _log = Logger();
-                  _log.i('No file selected.');
+                  final log = Logger();
+                  log.i('No file selected.');
                 }
               },
             ),
@@ -67,7 +67,7 @@ class MainDrawer extends StatelessWidget {
                 style: FontStyles.montserratStyle(15),
               ),
               onTap: () async {
-                // Your implementation for adding an empty CSV portfolio file
+                // Implementação para adicionar portfólio vazio
               },
             ),
             ListTile(

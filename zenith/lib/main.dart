@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:zenith/data/cryptocurrency_helper.dart';
 import 'package:zenith/databases/database_helper.dart';
-import 'package:zenith/models/cryptocurrency.dart';
 import 'package:zenith/view/splashes/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Garante que o Flutter esteja inicializado
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Zenith',
       home: SplashPage(),

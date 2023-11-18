@@ -16,7 +16,7 @@ class _AlertScreenState extends State<AlertScreen> {
 
   void _onItemTapped(int index) {
     if (index == 0) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreenWithPortfolio()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeScreenWithPortfolio()));
     } else {
       setState(() {
         _currentIndex = index;
@@ -48,7 +48,7 @@ class _AlertScreenState extends State<AlertScreen> {
             // Add your functionality when the button is pressed
           },
           backgroundColor: AppColors.secondaryBackgroundColor, // Set the background color as needed
-          child: Icon(Icons.add), // You can change the icon as needed
+          child: const Icon(Icons.add), // You can change the icon as needed
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

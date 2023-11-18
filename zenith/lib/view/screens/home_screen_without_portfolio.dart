@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:zenith/constants/app_colors.dart';
 import 'package:zenith/constants/font_styles.dart';
@@ -33,7 +32,7 @@ class _HomeScreenWithoutPortfolioState extends State<HomeScreenWithoutPortfolio>
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               ElevatedButton(
@@ -49,31 +48,31 @@ class _HomeScreenWithoutPortfolioState extends State<HomeScreenWithoutPortfolio>
                       await cryptocurrencyHelper.insertCryptocurrency(cryptocurrency);
                     }
                     await dbHelper.copyFileToExternalStorage();
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreenWithPortfolio()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeScreenWithPortfolio()));
                   } else {
-                    final _log = Logger();
-                    _log.i('Nenhum arquivo foi selecionado.');
+                    final log = Logger();
+                    log.i('Nenhum arquivo foi selecionado.');
                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.secondaryBackgroundColor,
-                  maximumSize: Size(300, double.infinity),
-                  minimumSize: Size(300, 70), 
+                  maximumSize: const Size(300, double.infinity),
+                  minimumSize: const Size(300, 70), 
                 ),
                 child: Text(
                   "Import a new portfolio .CSV file",
                   style: FontStyles.montserratStyle(15, color: Colors.white),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.secondaryBackgroundColor, 
-                  maximumSize: Size(300, double.infinity),
-                  minimumSize: Size(300, 70),
+                  maximumSize: const Size(300, double.infinity),
+                  minimumSize: const Size(300, 70),
                 ),
                 child: Text(
                   "Start with an empty portfolio",
