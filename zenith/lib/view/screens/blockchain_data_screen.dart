@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:zenith/constants/app_colors.dart';
 import 'package:zenith/constants/font_styles.dart';
 import 'package:zenith/view/components/main_bottom_navigation_bar.dart';
-import 'package:zenith/view/screens/home_screen_with_portfolio.dart';
 
-class AlertScreen extends StatefulWidget {
-  const AlertScreen({Key? key}) : super(key: key);
+class BlockchainDataScreen extends StatefulWidget {
+  const BlockchainDataScreen({super.key});
 
   @override
-  State<AlertScreen> createState() => _AlertScreenState();
+  State<BlockchainDataScreen> createState() => _BlockchainDataScreenState();
 }
 
-class _AlertScreenState extends State<AlertScreen> {
-  int _currentIndex = 1; // Defina o índice atual conforme necessário
+class _BlockchainDataScreenState extends State<BlockchainDataScreen> {
+  int _currentIndex = 2; // Defina o índice atual conforme necessário
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class _AlertScreenState extends State<AlertScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.secondaryBackgroundColor,
         title: Text(
-          'Alerts',
+          'Blockchain Data',
           style: FontStyles.montserratStyle(18),
         ),
       ),
@@ -44,4 +43,7 @@ class _AlertScreenState extends State<AlertScreen> {
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
     );
   }
+}
+
+class _currentIndex {
 }

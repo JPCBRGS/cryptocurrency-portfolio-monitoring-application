@@ -1,11 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:zenith/constants/app_colors.dart';
+import 'package:zenith/view/screens/alert_screen.dart';
+import 'package:zenith/view/screens/blockchain_data_screen.dart';
+import 'package:zenith/view/screens/home_screen_with_portfolio.dart';
 
 class MainBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
-  final Function(int) onTap;
 
-  const MainBottomNavigationBar({super.key, required this.currentIndex, required this.onTap});
+  const MainBottomNavigationBar({
+    Key? key,
+    required this.currentIndex,
+  }) : super(key: key);
+
+  void _onItemTapped(int index, BuildContext context) {
+    if (index == 0) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeScreenWithPortfolio()));
+    }
+
+    if (index == 1) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AlertScreen()));
+    } 
+
+    if (index == 2) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BlockchainDataScreen()));
+    }
+    else {
+      // Adicione qualquer lógica adicional aqui, se necessário.
+      // Por exemplo, você pode querer realizar alguma ação específica ao tocar em outros ícones.
+      // Se não for necessário, você pode remover este bloco else.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +44,17 @@ class MainBottomNavigationBar extends StatelessWidget {
           icon: Icon(Icons.notifications),
           label: 'Alerts',
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          label: 'Search',
+        ),
       ],
-      selectedItemColor: AppColors.selectedItemColor, // Color for the selected item
-      unselectedItemColor: Colors.white, // Color for unselected items
+      selectedItemColor: AppColors.selectedItemColor,
+      unselectedItemColor: Colors.white,
       showSelectedLabels: false,
       showUnselectedLabels: false,
       currentIndex: currentIndex,
-      onTap: onTap,
+      onTap: (index) => _onItemTapped(index, context),
     );
   }
 }
