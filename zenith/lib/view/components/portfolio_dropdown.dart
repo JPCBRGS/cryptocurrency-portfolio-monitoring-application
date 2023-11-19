@@ -31,8 +31,8 @@ class _PortfolioDropdownState extends State<PortfolioDropdown> {
     }
 
     return Container(
-      width: 320,
-      margin: const EdgeInsets.all(10.0),
+      width: 315,
+      //margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: AppColors.secondaryBackgroundColor,

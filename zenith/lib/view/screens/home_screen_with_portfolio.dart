@@ -70,63 +70,67 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
           loadData();
         },
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              PortfolioDropdown(
-                portfolios: portfolios,
-                selectedPortfolio: selectedPortfolio,
-                getCryptocurrenciesCallback: updateCryptocurrencies,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: AppColors.secondaryBackgroundColor,
+      body: Container(
+        margin: const EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PortfolioDropdown(
+                  portfolios: portfolios,
+                  selectedPortfolio: selectedPortfolio,
+                  getCryptocurrenciesCallback: updateCryptocurrencies,
                 ),
-                child: IconButton(
-                  icon: Icon(Icons.clear),
-                  color: Colors.white,
-                  onPressed: () {
-                    // Adicione aqui a lógica para executar quando o botão for pressionado
-                  },
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: AppColors.secondaryBackgroundColor,
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.clear),
+                    color: Colors.white,
+                    onPressed: () {
+                      // Adicione aqui a lógica para executar quando o botão for pressionado
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cryptocurrencies.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 15.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            cryptocurrencies[index].symbol,
-                            style: FontStyles.montserratStyle(24),
-                          ),
-                          Text(
-                            cryptocurrencies[index].quantity.toString(),
-                            style: FontStyles.montserratStyle(16, color: AppColors.selectedItemColor),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+              ],
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 10.0),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: cryptocurrencies.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              cryptocurrencies[index].symbol,
+                              style: FontStyles.montserratStyle(24),
+                            ),
+                            Text(
+                              cryptocurrencies[index].quantity.toString(),
+                              style: FontStyles.montserratStyle(16, color: AppColors.selectedItemColor),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: MainBottomNavigationBar(
         currentIndex: _currentIndex,
