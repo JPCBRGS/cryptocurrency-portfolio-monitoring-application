@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:zenith/constants/app_colors.dart';
 import 'package:zenith/constants/font_styles.dart';
-import 'package:zenith/data/cryptocurrency_helper.dart';
-import 'package:zenith/databases/database_helper.dart';
+import 'package:zenith/helpers/coins_list_helper.dart';
+import 'package:zenith/helpers/cryptocurrency_helper.dart';
+import 'package:zenith/helpers/database_helper.dart';
 import 'package:zenith/models/cryptocurrency.dart';
 import 'package:zenith/view/components/main_bottom_navigation_bar.dart';
 import 'package:zenith/view/components/main_drawer.dart';
@@ -13,11 +14,11 @@ class HomeScreenWithPortfolio extends StatefulWidget {
   const HomeScreenWithPortfolio({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenWithPortfolioState createState() =>
-      _HomeScreenWithPortfolioState();
+  _HomeScreenWithPortfolioState createState() => _HomeScreenWithPortfolioState();
 }
 
 class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
+  CoinsListHelper coinsListHelper = CoinsListHelper();
   int _currentIndex = 0; // define o índice referente à página atual conforme necessário
   List<String> portfolios = [];
   String? selectedPortfolio;
@@ -31,8 +32,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     database = await dbHelper.database;
     cryptocurrencyHelper = CryptocurrencyHelper(database);
 
-    List<String> allPortfoliosOrderedByCryptocurrencyCount =
-        await cryptocurrencyHelper.getPortfoliosOrderedByCryptocurrencies();
+    List<String> allPortfoliosOrderedByCryptocurrencyCount = await cryptocurrencyHelper.getPortfoliosOrderedByCryptocurrencies();
 
     setState(() {
       portfolios = allPortfoliosOrderedByCryptocurrencyCount;
@@ -83,17 +83,36 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                   selectedPortfolio: selectedPortfolio,
                   getCryptocurrenciesCallback: updateCryptocurrencies,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: AppColors.secondaryBackgroundColor,
+                Tooltip(
+                  message: 'Add new token to this portfolio',
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Colors.green,
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.add),
+                      color: Colors.white,
+                      onPressed: () {
+                        // Lógica para o botão de adição
+                      },
+                    ),
                   ),
-                  child: IconButton(
-                    icon: Icon(Icons.clear),
-                    color: Colors.white,
-                    onPressed: () {
-                      // Adicione aqui a lógica para executar quando o botão for pressionado
-                    },
+                ),
+                Tooltip(
+                  message: 'Delete this portfolio',
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Colors.redAccent,
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.clear),
+                      color: Colors.white,
+                      onPressed: () {
+                        // Lógica para o botão de remoção
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -107,6 +126,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: cryptocurrencies.length,
                     itemBuilder: (context, index) {
+                      String symbolToLowerCase = cryptocurrencies[index].symbol.toLowerCase();
                       return Container(
                         margin: const EdgeInsets.only(bottom: 10.0),
                         child: Column(
@@ -141,12 +161,17 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
   @override
   void initState() {
     super.initState();
+
     loadData();
   }
 
   void getCryptocurrenciesFromPortfolioToShow(String portfolio) async {
-    cryptocurrencies =
-        await cryptocurrencyHelper.getCryptocurrenciesFromPortfolio(portfolio);
+    cryptocurrencies = await cryptocurrencyHelper.getCryptocurrenciesFromPortfolio(portfolio);
+  }
+
+  Future<void> fetchCryptocurrencyList() async {
+    // Carregue a lista de criptomoedas
+    await coinsListHelper.fetchCoinsList();
   }
 
   void updateCryptocurrencies(String newPortfolio) {

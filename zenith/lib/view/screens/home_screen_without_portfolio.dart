@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:zenith/constants/app_colors.dart';
 import 'package:zenith/constants/font_styles.dart';
-import 'package:zenith/data/cryptocurrency_helper.dart';
-import 'package:zenith/databases/database_helper.dart';
+import 'package:zenith/helpers/cryptocurrency_helper.dart';
+import 'package:zenith/helpers/database_helper.dart';
 import 'package:zenith/models/cryptocurrency.dart';
 import 'package:zenith/utils/csv_utils.dart';
 import 'package:zenith/view/screens/home_screen_with_portfolio.dart';
@@ -47,7 +47,7 @@ class _HomeScreenWithoutPortfolioState extends State<HomeScreenWithoutPortfolio>
                     for (Cryptocurrency cryptocurrency in Cryptocurrencies) {
                       await cryptocurrencyHelper.insertCryptocurrency(cryptocurrency);
                     }
-                    await dbHelper.copyFileToExternalStorage();
+                    await dbHelper.copyDatabaseFileToExternalStorage();
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeScreenWithPortfolio()));
                   } else {
                     final log = Logger();

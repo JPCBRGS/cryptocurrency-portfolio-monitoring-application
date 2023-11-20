@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:zenith/data/cryptocurrency_helper.dart';
-import 'package:zenith/databases/database_helper.dart';
+import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:zenith/helpers/coins_list_helper.dart';
 import 'package:zenith/view/splashes/splash_page.dart';
 
+final _log = Logger();
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Garante que o Flutter esteja inicializado
+  WidgetsFlutterBinding.ensureInitialized();
 
   runApp(const MyApp());
 }

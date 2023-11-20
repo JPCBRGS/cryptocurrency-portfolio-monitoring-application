@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:zenith/constants/app_colors.dart';
 import 'package:zenith/constants/font_styles.dart';
-import 'package:zenith/data/cryptocurrency_helper.dart';
-import 'package:zenith/databases/database_helper.dart';
+import 'package:zenith/helpers/cryptocurrency_helper.dart';
+import 'package:zenith/helpers/database_helper.dart';
 import 'package:zenith/models/cryptocurrency.dart';
 import 'package:zenith/utils/csv_utils.dart';
 
@@ -54,7 +54,7 @@ class MainDrawer extends StatelessWidget {
                     await cryptocurrencyHelper.insertCryptocurrency(cryptocurrency);
                   }
                   loadedDropdownState!();
-                  await dbHelper.copyFileToExternalStorage();
+                  await dbHelper.copyDatabaseFileToExternalStorage();
                 } else {
                   final log = Logger();
                   log.i('No file selected.');

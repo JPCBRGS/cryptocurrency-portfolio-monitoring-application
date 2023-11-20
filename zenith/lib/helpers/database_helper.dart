@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:logger/logger.dart';
@@ -40,7 +41,7 @@ class DatabaseHelper {
     _log.i('Tabela Cryptocurrencies criada.');
   }
 
-  Future<void> copyFileToExternalStorage() async {
+  Future<void> copyDatabaseFileToExternalStorage() async {
     final appDocDir = await getDatabasesPath();
     final sourceFile = File('$appDocDir/$_databaseName');
     final destinationFile = File('/sdcard/Documents/$_databaseName');

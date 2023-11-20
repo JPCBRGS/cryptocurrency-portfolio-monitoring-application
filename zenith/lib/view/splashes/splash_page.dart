@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:zenith/constants/app_colors.dart'; // Importe o arquivo appColors.dart
 import 'package:zenith/constants/font_styles.dart';
-import 'package:zenith/data/cryptocurrency_helper.dart';
-import 'package:zenith/databases/database_helper.dart';
+import 'package:zenith/helpers/cryptocurrency_helper.dart';
+import 'package:zenith/helpers/database_helper.dart';
 import 'package:zenith/view/screens/home_screen_with_portfolio.dart';
 import 'package:zenith/view/screens/home_screen_without_portfolio.dart';
 
