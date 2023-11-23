@@ -23,6 +23,15 @@ class _AlertScreenState extends State<AlertScreen> {
           'Alerts',
           style: FontStyles.montserratStyle(18),
         ),
+        actions: [
+          IconButton(
+            onPressed: (){}, 
+            icon: Icon(
+              Icons.notifications,
+              color: Colors.yellow,
+            ),
+          ),
+        ],
       ),
       body: Container(
         color: AppColors.mainBackgroundColor,
