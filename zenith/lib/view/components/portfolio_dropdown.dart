@@ -31,7 +31,7 @@ class _PortfolioDropdownState extends State<PortfolioDropdown> {
     }
 
     return Container(
-      width: 200,
+      width: MediaQuery.of(context).size.width*0.50,
       //margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),

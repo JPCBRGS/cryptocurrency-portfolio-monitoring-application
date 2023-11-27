@@ -38,7 +38,7 @@ class CoinsListHelper {
   // Método para buscar uma lista de moedas por meio da API e repassar o valor de retorno a variável interna _coinsList
   Future<void> fetchCoinsList() async {
     final response = await http.get(Uri.parse(
-        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=brl&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en'));
+        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en'));
     if (response.statusCode == 200) {
       _log.i('Requisição da lista de criptomoedas finalizada com sucesso.');
       coinsList = json.decode(response.body);
@@ -70,6 +70,23 @@ class CoinsListHelper {
   }
 
   // Método para obter o id correspondente ao symbol de uma criptomoeda
+  bool checkIfCoinExistsBySymbol(String symbol) {
+    if (coinsList.isEmpty) {
+      _log.e('A lista de criptomoedas não foi carregada ainda.');
+      return false;
+    }
+
+    for (var coin in coinsList) {
+      if (coin['symbol'] == symbol) {
+        return true;
+      }
+    }
+
+    _log.i('Nenhuma criptomoeda encontrada com o símbolo: $symbol');
+    return false;
+  }
+
+  // Método para obter o id correspondente ao symbol de uma criptomoeda
   String? getCoinIdBySymbol(String symbol) {
     if (coinsList.isEmpty) {
       _log.e('A lista de criptomoedas não foi carregada ainda.');
@@ -79,6 +96,23 @@ class CoinsListHelper {
     for (var coin in coinsList) {
       if (coin['symbol'] == symbol) {
         return coin['id'];
+      }
+    }
+
+    _log.i('Nenhuma criptomoeda encontrada com o símbolo: $symbol');
+    return null;
+  }
+
+  // Método para obter o nome correspondente ao symbol de uma criptomoeda
+  String? getCoinNameBySymbol(String symbol) {
+    if (coinsList.isEmpty) {
+      _log.e('A lista de criptomoedas não foi carregada ainda.');
+      return null;
+    }
+
+    for (var coin in coinsList) {
+      if (coin['symbol'] == symbol) {
+        return coin['name'];
       }
     }
 
@@ -115,6 +149,40 @@ class CoinsListHelper {
         double currentPrice = coin['current_price'].toDouble();
         String formattedPrice = currentPrice.toStringAsFixed(4); // Arredonda para duas casas decimais
         return formattedPrice;
+      }
+    }
+
+    _log.i('Nenhuma criptomoeda encontrada com o símbolo: $symbol');
+    return null;
+  }
+
+    String? getCoinMarketCapBySymbol(String symbol) {
+    if (coinsList.isEmpty) {
+      _log.e('A lista de criptomoedas não foi carregada ainda.');
+      return null;
+    }
+
+    for (var coin in coinsList) {
+      if (coin['symbol'] == symbol) {
+        return coin['market_cap'].toString();
+      }
+    }
+
+    _log.i('Nenhuma criptomoeda encontrada com o símbolo: $symbol');
+    return null;
+  }
+
+  String? getCoinPriceVariationPercentageLastDayBySymbol(String symbol) {
+    if (coinsList.isEmpty) {
+      _log.e('A lista de criptomoedas não foi carregada ainda.');
+      return null;
+    }
+
+    for (var coin in coinsList) {
+      if (coin['symbol'] == symbol) {
+        double priceVariation = coin['price_change_percentage_24h'];
+        String formattedPriceVariation = priceVariation.toStringAsFixed(2);
+        return formattedPriceVariation;
       }
     }
 

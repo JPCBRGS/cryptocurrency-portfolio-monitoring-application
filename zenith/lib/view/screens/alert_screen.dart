@@ -28,7 +28,7 @@ class _AlertScreenState extends State<AlertScreen> {
             onPressed: (){}, 
             icon: Icon(
               Icons.notifications,
-              color: Colors.yellow,
+              color: Colors.grey,
             ),
           ),
         ],

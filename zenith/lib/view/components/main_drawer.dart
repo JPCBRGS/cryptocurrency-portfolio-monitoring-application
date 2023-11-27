@@ -23,7 +23,7 @@ class MainDrawer extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             SizedBox(
-              height: 94,
+              height: MediaQuery.of(context).size.height*0.1205,
               child: DrawerHeader(
                 decoration: const BoxDecoration(
                   color: AppColors.secondaryBackgroundColor,

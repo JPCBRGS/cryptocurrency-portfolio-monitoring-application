@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:zenith/helpers/coins_list_helper.dart';
 import 'package:zenith/models/cryptocurrency.dart';
 
 class CryptocurrencyHelper {
@@ -8,6 +9,11 @@ class CryptocurrencyHelper {
 
   // Recebe uma nova Cryptocurrency e insere ela no portfólio. Caso a moeda já exista naquele portfólio, é feita uma média dos valores antes que ela seja adicionada
   Future<void> insertCryptocurrency(Cryptocurrency cryptocurrency) async {
+    // Caso a criptomoeda que se faria o insert não exista na lista de criptomoedas disponíveis, o método não faz nada
+    if (!CoinsListHelper().checkIfCoinExistsBySymbol(cryptocurrency.symbol.toLowerCase())) {
+      return;
+    }
+
     final existingCrypto = await getCryptocurrencyInPortfolio(cryptocurrency.portfolio, cryptocurrency.symbol);
 
     if (existingCrypto != null) {

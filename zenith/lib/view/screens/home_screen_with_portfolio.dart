@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:zenith/constants/app_colors.dart';
 import 'package:zenith/constants/font_styles.dart';
@@ -9,6 +11,7 @@ import 'package:zenith/view/components/main_bottom_navigation_bar.dart';
 import 'package:zenith/view/components/main_drawer.dart';
 import 'package:zenith/view/components/portfolio_dropdown.dart';
 import 'package:zenith/view/screens/alert_screen.dart';
+import 'package:zenith/view/screens/home_screen_without_portfolio.dart';
 
 class HomeScreenWithPortfolio extends StatefulWidget {
   const HomeScreenWithPortfolio({Key? key}) : super(key: key);
@@ -88,6 +91,8 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                 Tooltip(
                   message: 'Refresh this page',
                   child: Container(
+                    width: MediaQuery.of(context).size.width * 0.125,
+                    height: MediaQuery.of(context).size.height * 0.0625,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                       color: Colors.blueAccent,
@@ -105,6 +110,8 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                 Tooltip(
                   message: 'Add new token to this portfolio',
                   child: Container(
+                    width: MediaQuery.of(context).size.width * 0.125,
+                    height: MediaQuery.of(context).size.height * 0.0625,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                       color: Colors.green,
@@ -121,6 +128,8 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                 Tooltip(
                   message: 'Delete this portfolio',
                   child: Container(
+                    width: MediaQuery.of(context).size.width * 0.125,
+                    height: MediaQuery.of(context).size.height * 0.0625,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                       color: Colors.redAccent,
@@ -129,7 +138,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                       icon: Icon(Icons.delete),
                       color: Colors.white,
                       onPressed: () {
-                        // Lógica para o botão de remoção
+                        deleteCurrentPortfolio(selectedPortfolio!);
                       },
                     ),
                   ),
@@ -148,6 +157,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                         String symbolLowerCase = cryptocurrencies[index].symbol.toLowerCase();
                         String? coinCurrentPrice = coinsListHelper.getCoinPriceBySymbol(symbolLowerCase);
                         String? coinImage = coinsListHelper.getCoinImageBySymbol(symbolLowerCase);
+                        String currentPortfolioValueForCoin = (double.parse(coinCurrentPrice!) * cryptocurrencies[index].quantity).toStringAsFixed(4);
                         return GestureDetector(
                           child: Container(
                             margin: const EdgeInsets.only(bottom: 10.0),
@@ -161,8 +171,8 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Image.network(
                                         coinImage!,
-                                        width: 30, // Defina a largura desejada da imagem
-                                        height: 30, // Defina a altura desejada da imagem
+                                        width: MediaQuery.of(context).size.width * 0.1, // Defina a largura desejada da imagem
+                                        height: MediaQuery.of(context).size.width * 0.1, // Defina a altura desejada da imagem
                                         fit: BoxFit.contain, // Ajuste o modo de ajuste da imagem conforme necessário
                                       ),
                                     ),
@@ -181,7 +191,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                                     ),
                                     Spacer(),
                                     Text(
-                                      'R\$ ${coinCurrentPrice ?? ""}', // Usando "${coinCurrentPrice ?? ""}" para lidar com o caso em que coinCurrentPrice é nulo
+                                      'U\$ $currentPortfolioValueForCoin', // Usando "${coinCurrentPrice ?? ""}" para lidar com o caso em que coinCurrentPrice é nulo
                                       style: FontStyles.montserratStyle(22),
                                     )
                                   ],
@@ -190,7 +200,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                             ),
                           ),
                           onTap: () {
-                            ChangeCurrencyDialog(coinImage, symbolLowerCase, coinCurrentPrice!);
+                            ChangeSelectedCurrencyDialog(cryptocurrencies[index].quantity.toString(), currentPortfolioValueForCoin, symbolLowerCase);
                           },
                         );
                       }),
@@ -225,32 +235,73 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           child: Container(
-            height: 370,
-            width: 270,
-            padding: EdgeInsets.all(16), // Adicione algum espaçamento interno, se desejar
+            color: AppColors.mainBackgroundColor,
+            height: MediaQuery.of(context).size.height * 0.55,
+            width: MediaQuery.of(context).size.width * 0.8,
+            padding: EdgeInsets.all(16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Center(
+                  child: Text(
+                    'Add new token',
+                    style: FontStyles.montserratStyle(18, color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
                 TextField(
                   controller: controller1,
+                  style: FontStyles.montserratStyle(15, color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Symbol',
+                    labelStyle: FontStyles.montserratStyle(15, color: Colors.white),
                   ),
                 ),
-                SizedBox(height: 10), // Adicione algum espaçamento vertical entre os campos
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
                 TextField(
                   controller: controller2,
+                  style: FontStyles.montserratStyle(15, color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Quantity',
+                    labelStyle: FontStyles.montserratStyle(15, color: Colors.white),
                   ),
                 ),
-                SizedBox(height: 10), // Adicione algum espaçamento vertical entre os campos
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
                 TextField(
                   controller: controller3,
+                  style: FontStyles.montserratStyle(15, color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Average purchase price',
+                    labelStyle: FontStyles.montserratStyle(15, color: Colors.white),
                   ),
                 ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0625),
+                ElevatedButton(
+                  onPressed: () async {
+                    Cryptocurrency cryptocurrencyToInsert = Cryptocurrency(
+                        portfolio: selectedPortfolio!,
+                        symbol: controller1.toString(),
+                        quantity: double.parse(controller2.toString()),
+                        averagePurchasePrice: double.parse(controller3.toString()));
+                    await cryptocurrencyHelper.insertCryptocurrency(cryptocurrencyToInsert);
+                    setState(() {
+                      getCryptocurrenciesFromPortfolioToShow(selectedPortfolio!);
+                    });
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondaryBackgroundColor,
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: Text(
+                    "Confirm",
+                    style: FontStyles.montserratStyle(15, color: Colors.white),
+                  ),
+                )
               ],
             ),
           ),
@@ -259,36 +310,176 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     );
   }
 
-  void ChangeCurrencyDialog(String coinImage, String symbolLowerCase, String coinCurrentPrice) {
+  void ChangeSelectedCurrencyDialog(String ownedAmount, String currentPortfolioValueForCoin, String symbolLowerCase) {
+    String? coinImage;
+    String? coinName;
+    String? coinPrice;
+    String? priceVariation;
+    String? coinMarketCap;
+    String symbolUpperCase = symbolLowerCase.toUpperCase();
+    MaterialColor priceVariationColor;
+    coinImage = coinsListHelper.getCoinImageBySymbol(symbolLowerCase);
+    coinName = coinsListHelper.getCoinNameBySymbol(symbolLowerCase);
+    coinPrice = coinsListHelper.getCoinPriceBySymbol(symbolLowerCase);
+    coinMarketCap = coinsListHelper.getCoinMarketCapBySymbol(symbolLowerCase);
+    priceVariation = coinsListHelper.getCoinPriceVariationPercentageLastDayBySymbol(symbolLowerCase);
+
+    double.parse(priceVariation!) >= 0 ? priceVariationColor = Colors.green : priceVariationColor = Colors.red;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
           child: Container(
-            height: 370,
-            width: 270,
+            color: AppColors.mainBackgroundColor,
+            height: MediaQuery.of(context).size.height * 0.6,
+            width: MediaQuery.of(context).size.width * 0.95,
             padding: EdgeInsets.all(16), // Adicione algum espaçamento interno, se desejar
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(
-                  coinImage!,
-                  width: 45, // Defina a largura desejada da imagem
-                  height: 45, // Defina a altura desejada da imagem
-                  fit: BoxFit.contain, // Ajuste o modo de ajuste da imagem conforme necessário
-                ),
-                SizedBox(height: 10), // Adicione algum espaçamento vertical entre os campos
-                TextField(
-                  controller: controller2,
-                  decoration: InputDecoration(
-                    labelText: 'Quantity',
+                Center(
+                  child: Column(
+                    children: [
+                      Image.network(
+                        coinImage!,
+                        width: 50, // Defina a largura desejada da imagem
+                        height: 50, // Defina a altura desejada da imagem
+                        fit: BoxFit.contain, // Ajuste o modo de ajuste da imagem conforme necessário
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+                      Text(
+                        "$coinName ($symbolUpperCase)",
+                        style: FontStyles.montserratStyle(20),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 10), // Adicione algum espaçamento vertical entre os campos
-                TextField(
-                  controller: controller3,
-                  decoration: InputDecoration(
-                    labelText: 'Average purchase price',
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                Row(
+                  children: [
+                    Text(
+                      "Owned amount:",
+                      style: FontStyles.montserratStyle(15),
+                    ),
+                    Spacer(),
+                    Text(
+                      ownedAmount!,
+                      style: FontStyles.montserratStyle(15),
+                    )
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                Row(
+                  children: [
+                    Text(
+                      "Current price:",
+                      style: FontStyles.montserratStyle(15),
+                    ),
+                    Spacer(),
+                    Text(
+                      "U\$ $coinPrice",
+                      style: FontStyles.montserratStyle(15),
+                    )
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                Row(
+                  children: [
+                    Text(
+                      "Total portfolio value:",
+                      style: FontStyles.montserratStyle(15),
+                    ),
+                    Spacer(),
+                    Text(
+                      "U\$ $currentPortfolioValueForCoin",
+                      style: FontStyles.montserratStyle(15),
+                    )
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                Row(
+                  children: [
+                    Text(
+                      "Market cap:",
+                      style: FontStyles.montserratStyle(15),
+                    ),
+                    Spacer(),
+                    Text(
+                      "U\$ $coinMarketCap",
+                      style: FontStyles.montserratStyle(15),
+                    )
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                Row(
+                  children: [
+                    Text(
+                      "Price variation (24 hours):",
+                      style: FontStyles.montserratStyle(15),
+                    ),
+                    Spacer(),
+                    Text(
+                      "$priceVariation %",
+                      style: FontStyles.montserratStyle(15, color: priceVariationColor),
+                    )
+                  ],
+                ),
+                // Adicione espaçamento entre o conteúdo e os botões
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+
+                // Adicione a linha dos botões
+                Row(
+                  children: [
+                    ElevatedButton(
+                      child: Text(
+                        "Add",
+                        style: FontStyles.montserratStyle(15, color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.secondaryBackgroundColor,
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        minimumSize: Size(MediaQuery.of(context).size.width * 0.325, MediaQuery.of(context).size.height * 0.05), // Tamanho mínimo do botão "Add"
+                      ),
+                      onPressed: () {
+                        // Lógica para o botão "Add"
+                        // Adicione a lógica desejada quando o botão "Add" for pressionado
+                      },
+                    ),
+
+                    // Espaçamento entre os botões
+                    Spacer(),
+                    // Botão "Drop"
+                    ElevatedButton(
+                      child: Text(
+                        "Drop",
+                        style: FontStyles.montserratStyle(15, color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.secondaryBackgroundColor,
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        minimumSize: Size(MediaQuery.of(context).size.width * 0.325, MediaQuery.of(context).size.height * 0.05), // Tamanho mínimo do botão "Add"
+                      ),
+                      onPressed: () {
+                        // Lógica para o botão "Drop"
+                        // Adicione a lógica desejada quando o botão "Drop" for pressionado
+                      }, 
+                    ),
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                ElevatedButton(
+                  child: Text(
+                    "New alert",
+                    style: FontStyles.montserratStyle(15, color: Colors.white),
                   ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondaryBackgroundColor,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    minimumSize: Size(MediaQuery.of(context).size.width * 0.75, MediaQuery.of(context).size.height * 0.05), // Tamanho mínimo do botão "Add"
+                  ),
+                  onPressed: () {
+                  },
                 ),
               ],
             ),
@@ -302,6 +493,21 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     setState(() {
       selectedPortfolio = newPortfolio;
       getCryptocurrenciesFromPortfolioToShow(newPortfolio);
+    });
+  }
+
+  Future<void> deleteCurrentPortfolio(String portfolio) async {
+    await cryptocurrencyHelper.deleteCryptocurrencyPortfolio(portfolio);
+    var portfoliosAfterDeletion = await cryptocurrencyHelper.getPortfoliosOrderedByCryptocurrencies();
+
+    setState(() {
+      if (portfoliosAfterDeletion.isEmpty) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreenWithoutPortfolio()));
+      } else {
+        selectedPortfolio = portfoliosAfterDeletion[0];
+        portfolios = portfoliosAfterDeletion;
+        loadData();
+      }
     });
   }
 }
