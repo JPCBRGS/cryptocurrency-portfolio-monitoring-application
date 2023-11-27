@@ -39,6 +39,15 @@ class DatabaseHelper {
       )
     ''');
     _log.i('Tabela Cryptocurrencies criada.');
+
+    await db.execute('''
+      CREATE TABLE Alerts(
+        Symbol TEXT,
+        TargetPrice REAL,
+        Status BOOLEAN
+      )
+    ''');
+    _log.i('Tabela de alertas criada.');
   }
 
   Future<void> copyDatabaseFileToExternalStorage() async {

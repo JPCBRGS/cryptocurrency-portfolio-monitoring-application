@@ -25,7 +25,7 @@ class CryptocurrencyHelper {
           : existingCrypto.averagePurchasePrice;
       final updatedCrypto = Cryptocurrency(
         portfolio: cryptocurrency.portfolio,
-        symbol: cryptocurrency.symbol,
+        symbol: cryptocurrency.symbol.toUpperCase(),
         quantity: newQuantity,
         averagePurchasePrice: newAveragePurchasePrice,
       );

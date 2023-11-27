@@ -5,12 +5,11 @@ import 'package:zenith/view/splashes/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  DatabaseHelper dbHelper = await DatabaseHelper.instance;
   CoinsListHelper coinsListHelper = await CoinsListHelper();
   await coinsListHelper.copyCoinsListFileToExternalStorage();
-  DatabaseHelper dbHelper = await DatabaseHelper.instance;
   await dbHelper.copyDatabaseFileToExternalStorage();
-  
+
   runApp(const MyApp());
 }
 
@@ -26,4 +25,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-                                                                                                                                             
