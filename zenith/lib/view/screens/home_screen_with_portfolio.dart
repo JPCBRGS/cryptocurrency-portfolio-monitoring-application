@@ -147,8 +147,8 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                                   'Confirm portfolio deletion',
                                   style: FontStyles.montserratStyle(20),
                                 ),
-                                content:
-                                    Text('Are you sure you want to delete your "${selectedPortfolio}" portfolio?', style: FontStyles.montserratStyle(15)),
+                                content: Text('Are you sure you want to delete your "${selectedPortfolio}" portfolio?',
+                                    style: FontStyles.montserratStyle(15)),
                                 actions: [
                                   // Botão para cancelar
                                   TextButton(
@@ -229,7 +229,8 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                             ),
                           ),
                           onTap: () {
-                            changeSelectedCurrencyDialog(cryptocurrencies[index].quantity.toString(), cryptocurrencies[index].averagePurchasePrice.toString(), currentPortfolioValueForCoin, symbolLowerCase);
+                            changeSelectedCurrencyDialog(index, cryptocurrencies[index].quantity.toString(),
+                                cryptocurrencies[index].averagePurchasePrice.toString(), currentPortfolioValueForCoin, symbolLowerCase);
                           },
                         );
                       }),
@@ -332,7 +333,8 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     );
   }
 
-  void changeSelectedCurrencyDialog(String ownedAmount, String averagePurchasePrice, String currentPortfolioValueForCoin, String symbolLowerCase) {
+  void changeSelectedCurrencyDialog(
+      int index, String ownedAmount, String averagePurchasePrice, String currentPortfolioValueForCoin, String symbolLowerCase) {
     String? coinImage;
     String? coinName;
     String? coinPrice;
@@ -352,178 +354,210 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
+            child: SingleChildScrollView(
           child: Container(
-            color: AppColors.mainBackgroundColor,
-            height: MediaQuery.of(context).size.height * 0.65,
-            width: MediaQuery.of(context).size.width * 0.95,
-            padding: EdgeInsets.all(16), // Adicione algum espaçamento interno, se desejar
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Column(
-                    children: [
-                      Image.network(
-                        coinImage!,
-                        width: 50, // Defina a largura desejada da imagem
-                        height: 50, // Defina a altura desejada da imagem
-                        fit: BoxFit.contain, // Ajuste o modo de ajuste da imagem conforme necessário
+              color: AppColors.mainBackgroundColor,
+              height: MediaQuery.of(context).size.height * 0.65,
+              width: MediaQuery.of(context).size.width * 1,
+              padding: EdgeInsets.all(10),
+              child: SingleChildScrollView(
+                // Adicione algum espaçamento interno, se desejar
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Column(
+                        children: [
+                          Image.network(
+                            coinImage!,
+                            width: 50, // Defina a largura desejada da imagem
+                            height: 50, // Defina a altura desejada da imagem
+                            fit: BoxFit.contain, // Ajuste o modo de ajuste da imagem conforme necessário
+                          ),
+                          SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+                          Text(
+                            "$coinName ($symbolUpperCase)",
+                            style: FontStyles.montserratStyle(20),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
-                      Text(
-                        "$coinName ($symbolUpperCase)",
-                        style: FontStyles.montserratStyle(20),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                    Row(
+                      children: [
+                        Text(
+                          "Owned amount:",
+                          style: FontStyles.montserratStyle(14),
+                        ),
+                        Spacer(),
+                        Text(
+                          ownedAmount!,
+                          style: FontStyles.montserratStyle(14),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                    Row(
+                      children: [
+                        Text(
+                          "Current price:",
+                          style: FontStyles.montserratStyle(14),
+                        ),
+                        Spacer(),
+                        Text(
+                          "U\$ $coinPrice",
+                          style: FontStyles.montserratStyle(14),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                    Row(
+                      children: [
+                        Text(
+                          "Average purchase price:",
+                          style: FontStyles.montserratStyle(14),
+                        ),
+                        Spacer(),
+                        Text(
+                          "U\$ ${double.parse(averagePurchasePrice).toStringAsFixed(4)}",
+                          style: FontStyles.montserratStyle(14),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                    Row(
+                      children: [
+                        Text(
+                          "Total portfolio value:",
+                          style: FontStyles.montserratStyle(14),
+                        ),
+                        Spacer(),
+                        Text(
+                          "U\$ $currentPortfolioValueForCoin",
+                          style: FontStyles.montserratStyle(14),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                    Row(
+                      children: [
+                        Text(
+                          "Market cap:",
+                          style: FontStyles.montserratStyle(14),
+                        ),
+                        Spacer(),
+                        Text(
+                          "U\$ $coinMarketCap",
+                          style: FontStyles.montserratStyle(14),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                    Row(
+                      children: [
+                        Text(
+                          "Price variation (24 hours):",
+                          style: FontStyles.montserratStyle(14),
+                        ),
+                        Spacer(),
+                        Text(
+                          "$priceVariation %",
+                          style: FontStyles.montserratStyle(14, color: priceVariationColor),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            addCoinDialog(index, ownedAmount, averagePurchasePrice, currentPortfolioValueForCoin, symbolLowerCase);
+                          },
+                          iconSize: 30, // Ajuste o tamanho do ícone conforme necessário
+                          color: Colors.white,
+                        ),
+
+                        // Espaçamento entre os botões
+                        Spacer(),
+
+                        IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            dropCoinDialog(index, ownedAmount, averagePurchasePrice, currentPortfolioValueForCoin, symbolLowerCase);
+                          },
+                          iconSize: 30, // Ajuste o tamanho do ícone conforme necessário
+                          color: Colors.white,
+                        ),
+
+                        Spacer(),
+
+                        IconButton(
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: AppColors.secondaryBackgroundColor,
+                                    title: Text(
+                                      'Confirm $symbolUpperCase deletion',
+                                      style: FontStyles.montserratStyle(20),
+                                    ),
+                                    content: Text('Are you sure you want to delete your "$symbolUpperCase" from this portfolio?',
+                                        style: FontStyles.montserratStyle(14)),
+                                    actions: [
+                                      // Botão para cancelar
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Fechar o diálogo
+                                        },
+                                        child: Text('Cancel', style: FontStyles.montserratStyle(15)),
+                                      ),
+                                      // Botão para confirmar a exclusão
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Fechar o diálogo
+                                          deleteCoinFromPortfolio(index);
+                                        },
+                                        child: Text('Confirm', style: FontStyles.montserratStyle(15)),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                          iconSize: 30, // Ajuste o tamanho do ícone conforme necessário
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                    ElevatedButton(
+                      child: Text(
+                        "New alert",
+                        style: FontStyles.montserratStyle(14, color: Colors.white),
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
-                Row(
-                  children: [
-                    Text(
-                      "Owned amount:",
-                      style: FontStyles.montserratStyle(15),
-                    ),
-                    Spacer(),
-                    Text(
-                      ownedAmount!,
-                      style: FontStyles.montserratStyle(15),
-                    )
-                  ],
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
-                Row(
-                  children: [
-                    Text(
-                      "Current price:",
-                      style: FontStyles.montserratStyle(15),
-                    ),
-                    Spacer(),
-                    Text(
-                      "U\$ $coinPrice",
-                      style: FontStyles.montserratStyle(15),
-                    )
-                  ],
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
-                Row(
-                  children: [
-                    Text(
-                      "Average purchase price:",
-                      style: FontStyles.montserratStyle(15),
-                    ),
-                    Spacer(),
-                    Text(
-                      "U\$ $averagePurchasePrice",
-                      style: FontStyles.montserratStyle(15),
-                    )
-                  ],
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
-                Row(
-                  children: [
-                    Text(
-                      "Total portfolio value:",
-                      style: FontStyles.montserratStyle(15),
-                    ),
-                    Spacer(),
-                    Text(
-                      "U\$ $currentPortfolioValueForCoin",
-                      style: FontStyles.montserratStyle(15),
-                    )
-                  ],
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
-                Row(
-                  children: [
-                    Text(
-                      "Market cap:",
-                      style: FontStyles.montserratStyle(15),
-                    ),
-                    Spacer(),
-                    Text(
-                      "U\$ $coinMarketCap",
-                      style: FontStyles.montserratStyle(15),
-                    )
-                  ],
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
-                Row(
-                  children: [
-                    Text(
-                      "Price variation (24 hours):",
-                      style: FontStyles.montserratStyle(15),
-                    ),
-                    Spacer(),
-                    Text(
-                      "$priceVariation %",
-                      style: FontStyles.montserratStyle(15, color: priceVariationColor),
-                    )
-                  ],
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        // Lógica para o botão "Add"
-                        // Adicione a lógica desejada quando o botão "Add" for pressionado
-                      },
-                      iconSize: 30, // Ajuste o tamanho do ícone conforme necessário
-                      color: Colors.white,
-                    ),
-
-                    // Espaçamento entre os botões
-                    Spacer(),
-
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        // Lógica para o botão "Subtract"
-                        // Adicione a lógica desejada quando o botão "Subtract" for pressionado
-                      },
-                      iconSize: 30, // Ajuste o tamanho do ícone conforme necessário
-                      color: Colors.white,
-                    ),
-
-                    Spacer(),
-
-                    IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        // Lógica para o botão "Remove all"
-                        // Adicione a lógica desejada quando o botão "Remove all" for pressionado
-                      },
-                      iconSize: 30, // Ajuste o tamanho do ícone conforme necessário
-                      color: Colors.white,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.secondaryBackgroundColor,
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        minimumSize: Size(
+                            MediaQuery.of(context).size.width * 0.75, MediaQuery.of(context).size.height * 0.05), // Tamanho mínimo do botão "Add"
+                      ),
+                      onPressed: () {},
                     ),
                   ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                ElevatedButton(
-                  child: Text(
-                    "New alert",
-                    style: FontStyles.montserratStyle(15, color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.secondaryBackgroundColor,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    minimumSize:
-                        Size(MediaQuery.of(context).size.width * 0.75, MediaQuery.of(context).size.height * 0.05), // Tamanho mínimo do botão "Add"
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
-        );
+              )),
+        ));
       },
     );
   }
 
-  void dropCoinDialog()
-  {
+  void addCoinDialog(int index, String ownedAmount, String averagePurchasePrice, String currentPortfolioValueForCoin, String symbolLowerCase) {
+    String symbolUpperCase = symbolLowerCase.toUpperCase();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -533,7 +567,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
           ),
           child: Container(
             color: AppColors.mainBackgroundColor,
-            height: MediaQuery.of(context).size.height * 0.55,
+            height: MediaQuery.of(context).size.height * 0.375,
             width: MediaQuery.of(context).size.width * 0.8,
             padding: EdgeInsets.all(16),
             child: Column(
@@ -541,50 +575,43 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
               children: [
                 Center(
                   child: Text(
-                    'Add new token',
+                    'Add $symbolUpperCase to wallet',
                     style: FontStyles.montserratStyle(18, color: Colors.white),
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
                 TextField(
                   controller: controller1,
-                  style: FontStyles.montserratStyle(15, color: Colors.white),
+                  style: FontStyles.montserratStyle(14, color: Colors.white),
                   decoration: InputDecoration(
-                    labelText: 'Symbol',
-                    labelStyle: FontStyles.montserratStyle(15, color: Colors.white),
+                    labelText: 'Amount',
+                    labelStyle: FontStyles.montserratStyle(14, color: Colors.white),
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
                 TextField(
                   controller: controller2,
-                  style: FontStyles.montserratStyle(15, color: Colors.white),
+                  style: FontStyles.montserratStyle(14, color: Colors.white),
                   decoration: InputDecoration(
-                    labelText: 'Quantity',
-                    labelStyle: FontStyles.montserratStyle(15, color: Colors.white),
+                    labelText: 'Average Purchase Price',
+                    labelStyle: FontStyles.montserratStyle(14, color: Colors.white),
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
-                TextField(
-                  controller: controller3,
-                  style: FontStyles.montserratStyle(15, color: Colors.white),
-                  decoration: InputDecoration(
-                    labelText: 'Average purchase price',
-                    labelStyle: FontStyles.montserratStyle(15, color: Colors.white),
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0625),
                 ElevatedButton(
                   onPressed: () async {
                     Cryptocurrency cryptocurrencyToInsert = Cryptocurrency(
                         portfolio: selectedPortfolio!,
-                        symbol: controller1.toString(),
-                        quantity: double.parse(controller2.toString()),
-                        averagePurchasePrice: double.parse(controller3.toString()));
+                        symbol: symbolLowerCase.toUpperCase(),
+                        quantity: double.parse(controller1.text.toString()),
+                        averagePurchasePrice: double.parse(controller2.text.toString()));
                     await cryptocurrencyHelper.insertCryptocurrency(cryptocurrencyToInsert);
                     setState(() {
                       getCryptocurrenciesFromPortfolioToShow(selectedPortfolio!);
                     });
+                    ownedAmount = (double.parse(ownedAmount) + cryptocurrencyToInsert.quantity).toString();
+                    averagePurchasePrice = cryptocurrencies[index].averagePurchasePrice.toString();
                     Navigator.pop(context);
+                    changeSelectedCurrencyDialog(index, ownedAmount, averagePurchasePrice, currentPortfolioValueForCoin, symbolLowerCase);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.secondaryBackgroundColor,
@@ -592,7 +619,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                   ),
                   child: Text(
                     "Confirm",
-                    style: FontStyles.montserratStyle(15, color: Colors.white),
+                    style: FontStyles.montserratStyle(14, color: Colors.white),
                   ),
                 )
               ],
@@ -601,6 +628,80 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
         );
       },
     );
+  }
+
+  void dropCoinDialog(int index, String ownedAmount, String averagePurchasePrice, String currentPortfolioValueForCoin, String symbolLowerCase) {
+    String symbolUpperCase = symbolLowerCase.toUpperCase();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
+            color: AppColors.mainBackgroundColor,
+            height: MediaQuery.of(context).size.height * 0.275,
+            width: MediaQuery.of(context).size.width * 0.8,
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Text(
+                    'Subtract $symbolUpperCase from wallet',
+                    style: FontStyles.montserratStyle(18, color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                TextField(
+                  controller: controller1,
+                  style: FontStyles.montserratStyle(14, color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Amount',
+                    labelStyle: FontStyles.montserratStyle(14, color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                ElevatedButton(
+                  onPressed: () async {
+                    double amountToSubtract = double.parse(controller1.text.toString());
+                    if (amountToSubtract >= double.parse(ownedAmount)) {
+                      await cryptocurrencyHelper.deleteCryptocurrencyInPortfolio(symbolUpperCase, selectedPortfolio);
+                    } else {
+                      Cryptocurrency cryptocurrencyToInsert = Cryptocurrency(
+                          portfolio: selectedPortfolio!,
+                          symbol: symbolLowerCase.toUpperCase(),
+                          quantity: double.parse(controller1.text.toString()) * -1,
+                          averagePurchasePrice: 0);
+                      await cryptocurrencyHelper.insertCryptocurrency(cryptocurrencyToInsert);
+                    }
+                    setState(() {
+                      getCryptocurrenciesFromPortfolioToShow(selectedPortfolio!);
+                    });
+                    ownedAmount = (double.parse(ownedAmount) - amountToSubtract).toString();
+                    Navigator.pop(context);
+                    changeSelectedCurrencyDialog(index, ownedAmount, averagePurchasePrice, currentPortfolioValueForCoin, symbolLowerCase);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondaryBackgroundColor,
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: Text(
+                    "Confirm",
+                    style: FontStyles.montserratStyle(14, color: Colors.white),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<Cryptocurrency> getCoinData(String symbolUpperCase) async {
+    return await cryptocurrencyHelper.getCryptocurrencyInPortfolio(selectedPortfolio, symbolUpperCase);
   }
 
   Future<void> getCryptocurrenciesFromPortfolioToShow(String portfolio) async {
@@ -614,6 +715,14 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     setState(() {
       selectedPortfolio = newPortfolio;
       getCryptocurrenciesFromPortfolioToShow(newPortfolio);
+    });
+  }
+
+  Future<void> deleteCoinFromPortfolio(index) async {
+    await cryptocurrencyHelper.deleteCryptocurrencyInPortfolio(cryptocurrencies[index].portfolio, cryptocurrencies[index].symbol);
+    var cryptocurrenciesAfterDeletion = await cryptocurrencyHelper.getCryptocurrenciesFromPortfolio(cryptocurrencies[index].portfolio);
+    setState(() {
+      cryptocurrencies = cryptocurrenciesAfterDeletion;
     });
   }
 

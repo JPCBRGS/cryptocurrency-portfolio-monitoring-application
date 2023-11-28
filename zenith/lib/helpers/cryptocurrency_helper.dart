@@ -103,7 +103,7 @@ class CryptocurrencyHelper {
   }
 
   // Método para excluir uma determinada Cryptocurrency em um portfólio. Recebe o symbol da criptomoeda e nome do portfólio como parâmetro
-  Future<void> deleteCryptocurrencyInPortfolio(String symbol, String portfolio) async {
+  Future<void> deleteCryptocurrencyInPortfolio(String portfolio, String symbol) async {
     final rowsAffected = await _db.delete(
       'Cryptocurrencies',
       where: 'Symbol = ? AND Portfolio = ?',
