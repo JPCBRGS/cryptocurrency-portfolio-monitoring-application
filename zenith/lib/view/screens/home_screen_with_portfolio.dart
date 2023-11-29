@@ -213,7 +213,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                                           style: FontStyles.montserratStyle(22),
                                         ),
                                         Text(
-                                          cryptocurrencies[index].quantity.toString(),
+                                          cryptocurrencies[index].quantity.toStringAsFixed(2),
                                           style: FontStyles.montserratStyle(14, color: AppColors.selectedItemColor),
                                         ),
                                       ],
@@ -254,6 +254,9 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
   }
 
   void addNewCurrencyDialog() {
+    controller1.text = "";
+    controller2.text = "";
+    controller3.text = "";
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -557,6 +560,8 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
   }
 
   void addCoinDialog(int index, String ownedAmount, String averagePurchasePrice, String currentPortfolioValueForCoin, String symbolLowerCase) {
+    controller1.text = "";
+    controller2.text = "";
     String symbolUpperCase = symbolLowerCase.toUpperCase();
     showDialog(
       context: context,
@@ -599,19 +604,29 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                 SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
                 ElevatedButton(
                   onPressed: () async {
-                    Cryptocurrency cryptocurrencyToInsert = Cryptocurrency(
-                        portfolio: selectedPortfolio!,
-                        symbol: symbolLowerCase.toUpperCase(),
-                        quantity: double.parse(controller1.text.toString()),
-                        averagePurchasePrice: double.parse(controller2.text.toString()));
-                    await cryptocurrencyHelper.insertCryptocurrency(cryptocurrencyToInsert);
+                    var cryptocurrencyToInsertAveragePrice = double.tryParse(controller2.text.toString());
+                    Cryptocurrency cryptocurrencyToInsert;
+                    if (cryptocurrencyToInsertAveragePrice != null) {
+                      cryptocurrencyToInsert = Cryptocurrency(
+                          portfolio: selectedPortfolio!,
+                          symbol: symbolLowerCase.toUpperCase(),
+                          quantity: double.parse(controller1.text.toString()),
+                          averagePurchasePrice: cryptocurrencyToInsertAveragePrice);
+                      await cryptocurrencyHelper.insertCryptocurrency(cryptocurrencyToInsert);
+                    } else {
+                      cryptocurrencyToInsert = Cryptocurrency(
+                          portfolio: selectedPortfolio!,
+                          symbol: symbolLowerCase.toUpperCase(),
+                          quantity: double.parse(controller1.text.toString()),
+                          averagePurchasePrice: 0);
+                      await cryptocurrencyHelper.insertCryptocurrency(cryptocurrencyToInsert);
+                    }
                     setState(() {
                       getCryptocurrenciesFromPortfolioToShow(selectedPortfolio!);
                     });
                     ownedAmount = (double.parse(ownedAmount) + cryptocurrencyToInsert.quantity).toString();
                     averagePurchasePrice = cryptocurrencies[index].averagePurchasePrice.toString();
                     Navigator.pop(context);
-                    changeSelectedCurrencyDialog(index, ownedAmount, averagePurchasePrice, currentPortfolioValueForCoin, symbolLowerCase);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.secondaryBackgroundColor,
@@ -631,6 +646,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
   }
 
   void dropCoinDialog(int index, String ownedAmount, String averagePurchasePrice, String currentPortfolioValueForCoin, String symbolLowerCase) {
+    controller1.text = "";
     String symbolUpperCase = symbolLowerCase.toUpperCase();
     showDialog(
       context: context,
@@ -681,7 +697,6 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                     });
                     ownedAmount = (double.parse(ownedAmount) - amountToSubtract).toString();
                     Navigator.pop(context);
-                    changeSelectedCurrencyDialog(index, ownedAmount, averagePurchasePrice, currentPortfolioValueForCoin, symbolLowerCase);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.secondaryBackgroundColor,
@@ -700,12 +715,29 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     );
   }
 
+  void sortCryptocurrencyList(List<Cryptocurrency> cryptocurrencies) {
+    for (int i = 0; i < cryptocurrencies.length - 1; i++) {
+      for (int j = i + 1; j < cryptocurrencies.length; j++) {
+        double priceI = double.parse(coinsListHelper.getCoinPriceBySymbol(cryptocurrencies[i].symbol.toLowerCase())!);
+        double priceJ = double.parse(coinsListHelper.getCoinPriceBySymbol(cryptocurrencies[j].symbol.toLowerCase())!);
+
+        if ((cryptocurrencies[i].quantity * priceI) < (cryptocurrencies[j].quantity * priceJ)) {
+          // Trocar os elementos diretamente
+          var temp = cryptocurrencies[i];
+          cryptocurrencies[i] = cryptocurrencies[j];
+          cryptocurrencies[j] = temp;
+        }
+      }
+    }
+  }
+
   Future<Cryptocurrency> getCoinData(String symbolUpperCase) async {
     return await cryptocurrencyHelper.getCryptocurrencyInPortfolio(selectedPortfolio, symbolUpperCase);
   }
 
   Future<void> getCryptocurrenciesFromPortfolioToShow(String portfolio) async {
     var cryptocurrenciesAux = await cryptocurrencyHelper.getCryptocurrenciesFromPortfolio(portfolio);
+    sortCryptocurrencyList(cryptocurrenciesAux);
     setState(() {
       cryptocurrencies = cryptocurrenciesAux;
     });

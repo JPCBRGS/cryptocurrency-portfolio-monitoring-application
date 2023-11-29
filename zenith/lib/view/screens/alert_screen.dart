@@ -12,6 +12,7 @@ class AlertScreen extends StatefulWidget {
 }
 
 class _AlertScreenState extends State<AlertScreen> {
+  TextEditingController controller1 = TextEditingController();
   int _currentIndex = 1; // Defina o índice atual conforme necessário
 
   @override
@@ -25,7 +26,7 @@ class _AlertScreenState extends State<AlertScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: (){}, 
+            onPressed: () {},
             icon: Icon(
               Icons.notifications,
               color: Colors.grey,
@@ -43,6 +44,7 @@ class _AlertScreenState extends State<AlertScreen> {
         padding: const EdgeInsets.only(bottom: 70),
         child: FloatingActionButton(
           onPressed: () {
+            addNewCurrencyDialog();
             // Add your functionality when the button is pressed
           },
           backgroundColor: AppColors.secondaryBackgroundColor, // Set the background color as needed
@@ -51,6 +53,78 @@ class _AlertScreenState extends State<AlertScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+    );
+  }
+
+  void addNewCurrencyDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
+            color: AppColors.mainBackgroundColor,
+            height: MediaQuery.of(context).size.height * 0.55,
+            width: MediaQuery.of(context).size.width * 0.8,
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Text(
+                    'Add new token',
+                    style: FontStyles.montserratStyle(18, color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                TextField(
+                  controller: controller1,
+                  style: FontStyles.montserratStyle(15, color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Symbol',
+                    labelStyle: FontStyles.montserratStyle(15, color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                TextField(
+                  controller: controller1,
+                  style: FontStyles.montserratStyle(15, color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Quantity',
+                    labelStyle: FontStyles.montserratStyle(15, color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+                TextField(
+                  controller: controller1,
+                  style: FontStyles.montserratStyle(15, color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Average purchase price',
+                    labelStyle: FontStyles.montserratStyle(15, color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0625),
+                ElevatedButton(
+                  onPressed: () {
+                    
+                    
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondaryBackgroundColor,
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: Text(
+                    "Confirm",
+                    style: FontStyles.montserratStyle(15, color: Colors.white),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
