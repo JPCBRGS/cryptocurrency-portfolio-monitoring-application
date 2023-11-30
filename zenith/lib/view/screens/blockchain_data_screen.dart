@@ -75,13 +75,14 @@ class _BlockchainDataScreenState extends State<BlockchainDataScreen> {
                   itemCount: transactions.length,
                   itemBuilder: (context, index) {
                     Transaction transaction = transactions[index];
+                    DateTime formattedDate = DateTime.fromMillisecondsSinceEpoch(transaction.date * 1000,);
                     return ListTile(
                       title: Text('Transaction ID: ${transaction.id}', style: FontStyles.montserratStyle(12, color: AppColors.selectedItemColor),),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Block ID: ${transaction.blockId}', style: FontStyles.montserratStyle(12),),
-                          Text('Date: ${transaction.date}', style: FontStyles.montserratStyle(12),),
+                          Text('Date: ${formattedDate}', style: FontStyles.montserratStyle(12),),
                           Text('Status: ${transaction.status}', style: FontStyles.montserratStyle(12),),
                           Text('Block Number: ${transaction.blockNumber}', style: FontStyles.montserratStyle(12),),
                           Text('Confirmations: ${transaction.confirmations}', style: FontStyles.montserratStyle(12),),
