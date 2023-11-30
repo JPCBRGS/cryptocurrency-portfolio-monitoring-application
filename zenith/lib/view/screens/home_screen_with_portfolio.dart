@@ -21,11 +21,12 @@ class HomeScreenWithPortfolio extends StatefulWidget {
 }
 
 class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
+  int _currentIndex = 0;
   TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
   TextEditingController controller3 = TextEditingController();
   CoinsListHelper coinsListHelper = CoinsListHelper();
-  int _currentIndex = 0; // define o índice referente à página atual conforme necessário
+  
   List<String> portfolios = [];
   String? selectedPortfolio;
   List<Cryptocurrency> cryptocurrencies = [];
@@ -47,6 +48,13 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
       selectedPortfolio = portfolios.isNotEmpty ? portfolios[0] : '';
     });
     await getCryptocurrenciesFromPortfolioToShow(selectedPortfolio!);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadData();
   }
 
   @override
@@ -244,13 +252,6 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
         currentIndex: _currentIndex,
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    loadData();
   }
 
   void addNewCurrencyDialog() {
@@ -715,7 +716,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
     );
   }
 
-  void sortCryptocurrencyList(List<Cryptocurrency> cryptocurrencies) {
+  void sortCryptocurrencyListByPortfolioValue(List<Cryptocurrency> cryptocurrencies) {
     for (int i = 0; i < cryptocurrencies.length - 1; i++) {
       for (int j = i + 1; j < cryptocurrencies.length; j++) {
         double priceI = double.parse(coinsListHelper.getCoinPriceBySymbol(cryptocurrencies[i].symbol.toLowerCase())!);
@@ -737,7 +738,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
 
   Future<void> getCryptocurrenciesFromPortfolioToShow(String portfolio) async {
     var cryptocurrenciesAux = await cryptocurrencyHelper.getCryptocurrenciesFromPortfolio(portfolio);
-    sortCryptocurrencyList(cryptocurrenciesAux);
+    sortCryptocurrencyListByPortfolioValue(cryptocurrenciesAux);
     setState(() {
       cryptocurrencies = cryptocurrenciesAux;
     });

@@ -1,9 +1,9 @@
-class Alerts {
+class Alert {
   final String symbol; // Nome do portfolio
-  final String targetPrice; // Sigla que representa o nome da criptomoeda
+  final double targetPrice; // Sigla que representa o nome da criptomoeda
   bool Status; // Quantidade disponível da criptomoeda
 
-  Alerts({
+  Alert({
     required this.symbol,
     required this.targetPrice,
     this.Status = false,
@@ -13,13 +13,13 @@ class Alerts {
     final map = <String, dynamic>{
       'Symbol': symbol,
       'TargetPrice': targetPrice,
-      'Status': Status,
+      'Status': Status == 1,
     };
     return map;
   }
 
-  Alerts.fromMap(Map<String, dynamic> map)
-      : symbol = map['Symbol'],
-        targetPrice = map['TargetPrice'],
-        Status = map['Status'];
+  Alert.fromMap(Map<String, dynamic> map)
+    : symbol = map['Symbol'],
+      targetPrice = map['TargetPrice'],
+      Status = map['Status'] == 1; // Converte para um valor booleano
 }
