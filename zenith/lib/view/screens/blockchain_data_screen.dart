@@ -32,6 +32,3 @@ class _BlockchainDataScreenState extends State<BlockchainDataScreen> {
     );
   }
 }
-
-class _currentIndex {
-}

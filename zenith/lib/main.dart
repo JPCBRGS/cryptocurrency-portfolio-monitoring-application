@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zenith/helpers/blockchain_helper.dart';
 import 'package:zenith/helpers/coins_list_helper.dart';
 import 'package:zenith/helpers/database_helper.dart';
 import 'package:zenith/view/splashes/splash_page.dart';
@@ -9,7 +10,8 @@ void main() async {
   CoinsListHelper coinsListHelper = await CoinsListHelper();
   await coinsListHelper.copyCoinsListFileToExternalStorage();
   await dbHelper.copyDatabaseFileToExternalStorage();
-
+  BlockchainHelper blHelper = BlockchainHelper();
+  blHelper.fetchBitcoinTransaction();
   runApp(const MyApp());
 }
 
