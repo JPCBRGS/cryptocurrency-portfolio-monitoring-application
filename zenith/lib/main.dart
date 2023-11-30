@@ -10,8 +10,7 @@ void main() async {
   CoinsListHelper coinsListHelper = await CoinsListHelper();
   await coinsListHelper.copyCoinsListFileToExternalStorage();
   await dbHelper.copyDatabaseFileToExternalStorage();
-  BlockchainHelper blHelper = BlockchainHelper();
-  blHelper.fetchBitcoinTransaction();
+  
   runApp(const MyApp());
 }
 

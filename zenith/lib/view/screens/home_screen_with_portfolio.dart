@@ -361,7 +361,7 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
             child: SingleChildScrollView(
           child: Container(
               color: AppColors.mainBackgroundColor,
-              height: MediaQuery.of(context).size.height * 0.65,
+              height: MediaQuery.of(context).size.height * 0.55,
               width: MediaQuery.of(context).size.width * 1,
               padding: EdgeInsets.all(10),
               child: SingleChildScrollView(
@@ -537,20 +537,6 @@ class _HomeScreenWithPortfolioState extends State<HomeScreenWithPortfolio> {
                           color: Colors.white,
                         ),
                       ],
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                    ElevatedButton(
-                      child: Text(
-                        "New alert",
-                        style: FontStyles.montserratStyle(14, color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.secondaryBackgroundColor,
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        minimumSize: Size(
-                            MediaQuery.of(context).size.width * 0.75, MediaQuery.of(context).size.height * 0.05), // Tamanho mínimo do botão "Add"
-                      ),
-                      onPressed: () {},
                     ),
                   ],
                 ),
