@@ -52,17 +52,7 @@ class _BlockchainDataScreenState extends State<BlockchainDataScreen> {
               ),
             ) ,
           ),
-          Tooltip(
-            message: "Search specific transaction hash",
-            child: IconButton(
-              onPressed: () async {
-              },
-              icon: Icon(
-                Icons.handshake_rounded,
-              ),
-            ),
-          )
-        ],
+        ]
       ),
       body: Container(
         color: AppColors.mainBackgroundColor,
@@ -103,7 +93,7 @@ class _BlockchainDataScreenState extends State<BlockchainDataScreen> {
   }
 
   void addNewAlertDialog() {
-    controller1.text = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
+    controller1.text = "0x71C7656EC7ab88b098defB751B7401B5f6d8976F";
     controller2.text = "";
     controller3.text = "";
     showDialog(

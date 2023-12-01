@@ -35,7 +35,7 @@ class _SplashPageState extends State<SplashPage> {
                 ).createShader(bounds);
               },
               child: Text(
-                "Welcome to Zenith!",
+                "Welcome!",
                 style: FontStyles.montserratStyle(24, color: Colors.white),
               ),
             ),

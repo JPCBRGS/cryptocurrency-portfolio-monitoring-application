@@ -10,7 +10,7 @@ class BlockchainHelper {
 
   BlockchainHelper() {}
 
-Future<List<Transaction>> fetchBitcoinTransactionsForAddress(String address, {String protocol = "bitcoin", String network = "mainnet"}) async {
+Future<List<Transaction>> fetchBitcoinTransactionsForAddress(String address, {String protocol = "ethereum", String network = "mainnet"}) async {
   final url = 'https://svc.blockdaemon.com/universal/v1/$protocol/$network/account/$address/txs';
   final apiKey = 'zpka_2ca01a33067b47cca285c82303d2fc1b_360ea1dd';
 
