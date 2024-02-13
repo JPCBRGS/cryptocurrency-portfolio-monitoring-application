@@ -54,6 +54,9 @@ class _AlertScreenState extends State<AlertScreen> {
           'Alerts',
           style: FontStyles.montserratStyle(18),
         ),
+        iconTheme: IconThemeData(
+          color: Colors.white, // Definindo a cor do ícone como branco
+        ),
         actions: [
           IconButton(
             onPressed: () async {

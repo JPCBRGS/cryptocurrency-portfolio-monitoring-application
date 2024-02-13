@@ -39,6 +39,9 @@ class _BlockchainDataScreenState extends State<BlockchainDataScreen> {
           'Blockchain Data',
           style: FontStyles.montserratStyle(18),
         ),
+        iconTheme: IconThemeData(
+          color: Colors.white, // Definindo a cor do ícone como branco
+        ),
         actions: [
           Tooltip(
             message: "Search for recent transactions by given address",
