@@ -144,7 +144,7 @@ class _AlertScreenState extends State<AlertScreen> {
             // Add your functionality when the button is pressed
           },
           backgroundColor: AppColors.secondaryBackgroundColor,
-          child: const Icon(Icons.add),
+          child: const Icon(Icons.add, color: Colors.white,),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

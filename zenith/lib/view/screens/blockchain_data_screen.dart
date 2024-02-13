@@ -49,6 +49,7 @@ class _BlockchainDataScreenState extends State<BlockchainDataScreen> {
               },
               icon: Icon(
                 Icons.search,
+                color: Colors.white,
               ),
             ) ,
           ),
